@@ -11,7 +11,16 @@ namespace AquariumLibrary.AbstractClasses
 {
     public abstract class AFish : AGameObject, IMovable, ICollision 
     {
+        /// <summary>
+        /// Направление рыбы
+        /// </summary>
+        /// 
         public VectorF Direction { get; protected set; }
+
+        /// <summary>
+        /// Точка к которой двигается рыбка
+        /// </summary>
+        public PointF NextPoint { get; protected set; }
         public abstract void Move();
 
         public abstract bool IsPointInside(PointF point);

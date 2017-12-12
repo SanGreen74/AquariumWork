@@ -10,7 +10,7 @@ namespace AquariumLibrary.Interfaces
     public interface IMovable
     {
         /// <summary>
-        /// Двигает объект по направлению
+        /// Двигает объект по текущему направлению
         /// </summary>
         void Move();
     }
