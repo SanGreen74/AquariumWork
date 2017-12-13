@@ -58,6 +58,7 @@
     <Compile Include="BaseClasses\VectorF.cs" />
     <Compile Include="Fishes\BlueNeon.cs" />
     <Compile Include="Fishes\Piranha.cs" />
+    <Compile Include="Fishes\SwordsMan.cs" />
     <Compile Include="Interfaces\IAquarium.cs" />
     <Compile Include="Interfaces\ICollision.cs" />
     <Compile Include="Interfaces\IHunter.cs" />
