@@ -42,7 +42,7 @@ namespace AquariumLibrary.AbstractClasses
             Location = GetNextPoint();
         }
 
-        protected PointF GetNextPoint()
+        protected virtual PointF GetNextPoint()
         {
             var random = new Random();
             while (true)
