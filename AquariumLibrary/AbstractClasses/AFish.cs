@@ -31,7 +31,7 @@ namespace AquariumLibrary.AbstractClasses
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        protected bool IsPointInsideAquarium(PointF point)
+        protected bool IsPointBelongAquarium(PointF point)
         {
             return (0 < point.X && point.X < Aquarium.Size.Width &&
                     0 < point.Y && point.Y < Aquarium.Size.Height);
@@ -48,7 +48,7 @@ namespace AquariumLibrary.AbstractClasses
             while (true)
             {
                 var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-                if (IsPointInsideAquarium(nextPoint)) return nextPoint;
+                if (IsPointBelongAquarium(nextPoint)) return nextPoint;
                 Direction = Direction.Rotate(random.Next(0, 180));
             }
         }

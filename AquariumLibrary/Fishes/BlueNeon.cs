@@ -15,7 +15,12 @@ namespace AquariumLibrary.Fishes
             : base(location, size, aquarium)
         {
             Speed = 4;
+            
         }
 
+        protected override PointF GetNextPoint()
+        {
+            return base.GetNextPoint();
+        }
     }
 }

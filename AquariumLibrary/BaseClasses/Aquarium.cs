@@ -34,7 +34,7 @@ namespace AquariumLibrary.BaseClasses
         public Size Size { get; }
         public IEnumerable<AGameObject> GetGameObjects()
         {
-            throw new NotImplementedException();
+            return _gameObjects;
         }
 
         public IEnumerable<AFish> GetFishes()
