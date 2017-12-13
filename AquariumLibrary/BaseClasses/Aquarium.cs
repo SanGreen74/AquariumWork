@@ -41,12 +41,18 @@ namespace AquariumLibrary.BaseClasses
         public Size Size { get; }
         public IEnumerable<AGameObject> GetGameObjects()
         {
-            throw new NotImplementedException();
+            return _gameObjects;
         }
 
         public IEnumerable<AFish> GetFishes()
         {
             return _gameObjects.OfType<AFish>();
+        }
+
+        public bool IsPointBelongAquarium(PointF point)
+        {
+            return (0 < point.X && point.X < this.Size.Width &&
+                    0 < point.Y && point.Y < this.Size.Height);
         }
     }
 }
