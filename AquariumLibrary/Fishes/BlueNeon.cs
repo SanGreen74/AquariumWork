@@ -14,6 +14,7 @@ namespace AquariumLibrary.Fishes
         public BlueNeon(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
+            
             Speed = 4;
         }
 

@@ -41,5 +41,11 @@ namespace AquariumLibrary.BaseClasses
         {
             return _gameObjects.OfType<AFish>();
         }
+
+        public bool IsPointBelongAquarium(PointF point)
+        {
+            return (0 < point.X && point.X < this.Size.Width &&
+                    0 < point.Y && point.Y < this.Size.Height);
+        }
     }
 }

@@ -24,5 +24,11 @@ namespace AquariumLibrary.Interfaces
         /// Возвращает список всех рыб, находящихся в аквариуме
         /// </summary>
         IEnumerable<AFish> GetFishes();
+
+        /// <summary>
+        /// Принадлежит ли точка point аквариуму
+        /// </summary>
+        /// <param name="point">точка</param>
+        bool IsPointBelongAquarium(PointF point);
     }
 }
