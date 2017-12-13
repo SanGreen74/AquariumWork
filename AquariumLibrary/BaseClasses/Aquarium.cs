@@ -34,8 +34,8 @@ namespace AquariumLibrary.BaseClasses
             }
             location = new PointF(200, 200);
             size = new SizeF(60, 30);
-            _gameObjects.Add(new Piranha(location, size, this));
-            _gameObjects.Add(new SwordsMan(new PointF((Random1.rnd.Next(60)),(Random1.rnd.Next(60))), new SizeF(85, 22), this));
+            //_gameObjects.Add(new Piranha(location, size, this));
+            _gameObjects.Add(new SwordsMan(new PointF((Random1.rnd.Next(60)),(Random1.rnd.Next(60))), new SizeF(100, 50), this));
         }
 
         public Size Size { get; }

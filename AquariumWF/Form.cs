@@ -10,12 +10,12 @@ using AquariumLibrary.Interfaces;
 
 namespace AquariumWF
 {
-    public class Form : System.Windows.Forms.Form
+    public sealed class Form : System.Windows.Forms.Form
     {
         private IAquarium _aquarium;
         public Form()
         {
-            _aquarium = new Aquarium(new Size(500, 500));
+            _aquarium = new Aquarium(new Size(900, 900));
             Size = new Size(1000, 1000);
             DoubleBuffered = true;
             Init();

@@ -58,11 +58,8 @@
     <Compile Include="BaseClasses\VectorF.cs" />
     <Compile Include="Fishes\BlueNeon.cs" />
     <Compile Include="Fishes\Piranha.cs" />
-<<<<<<< HEAD
     <Compile Include="Fishes\SwordsMan.cs" />
-=======
     <Compile Include="Fishes\Catfish.cs" />
->>>>>>> b0a3461ad1d105bb904de0e35524c6d25fe6c589
     <Compile Include="Interfaces\IAquarium.cs" />
     <Compile Include="Interfaces\ICollision.cs" />
     <Compile Include="Interfaces\IHunter.cs" />

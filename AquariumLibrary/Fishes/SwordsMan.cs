@@ -10,7 +10,7 @@ using AquariumLibrary.BaseClasses;
 
 namespace AquariumLibrary.Fishes
 {
-    class SwordsMan : AFish, IHunter, ICollision
+    public class SwordsMan : AFish, IHunter
     {
         public SwordsMan(PointF location, SizeF size, IAquarium aquarium) : base(location, size, aquarium)
         {
@@ -39,10 +39,10 @@ namespace AquariumLibrary.Fishes
             {
                 if (GetSizeOf(fish.Size) < GetSizeOf(Size) && IsNoticed(fish))
                 {
-                    if (Random1.LowChanceOfAttac())
-                    {
+                    //if (Random1.LowChanceOfAttac())
+                    //{
                         return fish;
-                    }
+                    //}
                 }
             }
             return null;
@@ -62,18 +62,19 @@ namespace AquariumLibrary.Fishes
                 Speed += Speed * 0.0035; 
                 return nextPoint;
             }
-            else
-            {
-                Victim = null;
-            }
             return base.GetNextPoint();
         }
 
-        public bool IsNoticed(AFish anotherFish)// Если короч жертва в радиусе видимости
+        /// <summary>
+        /// Находится ли жертва anotherFish в зоне видимости
+        /// </summary>
+        /// <param name="anotherFish">Жертва</param>
+        public bool IsNoticed(AFish anotherFish)
         {
-            var radius = Size.Width * 1.5;
-            double distance = Math.Sqrt(Math.Pow(anotherFish.Location.X - Location.X, 2) + Math.Pow(anotherFish.Location.Y - Location.Y, 2));
-            return (radius >= distance);
+            var radiusOfVisibility = Size.Width * 1.5;
+            var distanceToAnotherFish = Math.Sqrt((anotherFish.Location.X - Location.X) * (anotherFish.Location.X - Location.X)
+                                                + (anotherFish.Location.Y- Location.Y) * (anotherFish.Location.Y - Location.Y));
+            return radiusOfVisibility >= distanceToAnotherFish;
         }
 
         public double GetSizeOf(SizeF size)
