@@ -22,13 +22,19 @@ namespace AquariumLibrary.BaseClasses
 
         private void Init()
         {
+            var location = new PointF();
+            var size = new SizeF();
             _gameObjects = new List<AGameObject>();
-            for (var i = 1; i < 10; i++)
+            for (var i = 1; i < 3; i++)
             {
-                var location = new PointF(30, i*10);
-                var size = new SizeF(50,20);
+                location = new PointF(30, i*10);
+                size = new SizeF(50,20);
                 _gameObjects.Add(new BlueNeon(location, size, this));
+                
             }
+            location = new PointF(200, 200);
+            size = new SizeF(60, 30);
+            _gameObjects.Add(new Piranha(location, size, this));
         }
 
         public Size Size { get; }
@@ -40,6 +46,12 @@ namespace AquariumLibrary.BaseClasses
         public IEnumerable<AFish> GetFishes()
         {
             return _gameObjects.OfType<AFish>();
+        }
+
+        public bool IsPointBelongAquarium(PointF point)
+        {
+            return (0 < point.X && point.X < this.Size.Width &&
+                    0 < point.Y && point.Y < this.Size.Height);
         }
     }
 }
