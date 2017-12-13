@@ -11,17 +11,15 @@ namespace AquariumLibrary.Interfaces
     public interface ICollision
     {
         /// <summary>
-        /// Принадлежит ли точка объекту
+        /// Принадлежит ли точка point объекту
         /// </summary>
         /// <param name="point">Точка PointF</param>
-        /// <returns></returns>
         bool IsPointInside(PointF point);
 
         /// <summary>
-        /// Есть ли столкновение между двумя объектами
+        /// Есть ли соприкосновение с объектом otherGameObject
         /// </summary>
-        /// <param name="otheGameObject"></param>
-        /// <returns></returns>
-        bool IsCollision(AGameObject otheGameObject);
+        /// <param name="otherGameObject"></param>
+        bool IsCollision(AGameObject otherGameObject);
     }
 }

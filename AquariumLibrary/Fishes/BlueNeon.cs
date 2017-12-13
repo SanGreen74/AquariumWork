@@ -5,26 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AquariumLibrary.AbstractClasses;
+using AquariumLibrary.Interfaces;
 
 namespace AquariumLibrary.Fishes
 {
     public class BlueNeon : AFish
     {
-        public override void Move()
+        public BlueNeon(PointF location, SizeF size, IAquarium aquarium) : base(location, size, aquarium)
         {
-            throw new NotImplementedException();
+            Speed = 4;
         }
 
-        public override bool IsPointInside(PointF point)
-        {
-            var rectangle = Rectangle;
-            return (rectangle.Left <= point.X && point.X < rectangle.Right
-                    && rectangle.Bottom <= point.Y && point.Y <= rectangle.Top);
-        }
-
-        public override bool IsCollision(AGameObject otheGameObject)
-        {
-            return Rectangle.IntersectsWith(otheGameObject.Rectangle);
-        }
     }
 }

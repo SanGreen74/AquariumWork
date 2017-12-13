@@ -14,7 +14,7 @@ namespace AquariumLibrary.BaseClasses
         public PointF End { get; }
         public float X { get; }
         public float Y { get; }
-
+        public double Angle => Math.Atan2(X, Y);
         public VectorF(PointF start, PointF end)
         {
             Start = start;
@@ -27,6 +27,8 @@ namespace AquariumLibrary.BaseClasses
         {
             Start = new PointF(0f, 0f);
             End = new PointF(x, y);
+            X = x;
+            Y = y;
         }
 
         public static VectorF operator +(VectorF vector1, VectorF vector2)
@@ -79,6 +81,12 @@ namespace AquariumLibrary.BaseClasses
             return Math.Acos(vector1 * vector2 / (vector1.GetLength() * vector2.GetLength()));
         }
 
+        /// <summary>
+        /// Соединяет ли вектор два вектора v1 и v2
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <returns></returns>
         public bool IsVectorBetween(VectorF v1, VectorF v2)
         {
             var v1v2 = v1 ^ v2;
@@ -102,5 +110,37 @@ namespace AquariumLibrary.BaseClasses
         /// </summary>
         /// <returns></returns>
         public VectorF Normalized => new VectorF(X / (float)GetLength(), Y / (float)GetLength());
+
+        /// <summary>
+        /// Возвращает еденичный вектор с координатами (-1,0)
+        /// </summary>
+        public static VectorF Left => new VectorF(-1,-0);
+
+        /// <summary>
+        /// Возвращает еденичный вектор с координатами (1,0)
+        /// </summary>
+        public static VectorF Rigth => new VectorF(1f,0f);
+
+        /// <summary>
+        /// Возвращает еденичный вектор с координатами (0,-1)
+        /// </summary>
+        public static VectorF Up => new VectorF(0,-1);
+
+        /// <summary>
+        /// Возвращает еденичный вектор с координатами (0,1)
+        /// </summary>
+        public static VectorF Down => new VectorF(0, 1);
+
+        /// <summary>
+        /// Поворачивает вектор на указанный угол angle
+        /// </summary>
+        /// <param name="angle">Угол в радианах</param>
+        /// <returns></returns>
+        public VectorF Rotate(int angle)
+        {
+            var newX = X * Math.Cos(angle) - Y * Math.Sin(angle);
+            var newY = X * Math.Sin(angle) + Y * Math.Cos(angle);
+            return new VectorF((float)newX, (float)newY);
+        }
     }
 }
