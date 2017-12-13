@@ -11,7 +11,8 @@ namespace AquariumLibrary.Fishes
 {
     public class BlueNeon : AFish
     {
-        public BlueNeon(PointF location, SizeF size, IAquarium aquarium) : base(location, size, aquarium)
+        public BlueNeon(PointF location, SizeF size, IAquarium aquarium)
+            : base(location, size, aquarium)
         {
             Speed = 4;
         }

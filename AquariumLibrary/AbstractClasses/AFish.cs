@@ -17,11 +17,12 @@ namespace AquariumLibrary.AbstractClasses
         public VectorF Direction
         {
             get { return _direction; }
-            protected set
+            set
             {
                 if (Math.Abs(1 - value.GetLength()) > 0.1)
-                    throw new ArgumentException("Длина вектора должна быть равна еденице");
-                _direction = value;
+                    _direction = value.Normalized;
+                else
+                    _direction = value;
             }
         }
 
@@ -48,7 +49,7 @@ namespace AquariumLibrary.AbstractClasses
             {
                 var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
                 if (IsPointInsideAquarium(nextPoint)) return nextPoint;
-                Direction = Direction.Rotate(random.Next(0,180));
+                Direction = Direction.Rotate(random.Next(0, 180));
             }
         }
 

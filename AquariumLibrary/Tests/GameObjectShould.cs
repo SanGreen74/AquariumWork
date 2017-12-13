@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using AquariumLibrary.AbstractClasses;
+using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Fishes;
 using AquariumLibrary.Interfaces;
 using FluentAssertions;
@@ -12,10 +13,10 @@ namespace AquariumLibrary.Tests
     public class GameObjectShould
     {
         private IAquarium _aquarium;
-        private AGameObject _neon1;
-        private AGameObject _neon2;
-        private AGameObject _neon3;
-        private AGameObject _neon4;
+        private AFish _neon1;
+        private AFish _neon2;
+        private AFish _neon3;
+        private AFish _neon4;
         private readonly SizeF _defaultFishSize = new SizeF(5f, 2f);
         private const double Epsilon = 0.01;
 
@@ -71,6 +72,21 @@ namespace AquariumLibrary.Tests
             var zero = Math.Abs(Math.Sqrt(2) - _neon1.DistanceTo(_neon2));
             zero.Should().BeLessThan(Epsilon);
             _neon1.DistanceTo(_neon1).Should().BeLessThan(Epsilon);
+        }
+
+        [Test]
+        public void CorrectSetDirection()
+        {
+            var zero = CalculateError(1.0, _neon1.Direction.GetLength());
+            zero.Should().BeLessThan(Epsilon);
+            _neon1.Direction = new VectorF(5123f, 2132f);
+            zero = CalculateError(1.0, _neon1.Direction.GetLength());
+            zero.Should().BeLessThan(Epsilon);
+        }
+
+        private double CalculateError(double should, double actual)
+        {
+            return Math.Abs(should - actual);
         }
     }
 }
