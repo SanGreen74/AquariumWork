@@ -36,7 +36,7 @@ namespace AquariumLibrary.Fishes
         {
             foreach (var fish in Aquarium.GetFishes())
             {
-                if (Random1.rnd.Next(10) == 0)
+                if (Random1.rnd.Next(2) == 0)
                 {
                     return fish;
                 }
@@ -44,17 +44,34 @@ namespace AquariumLibrary.Fishes
             return null;
         }
 
+        public bool IsInside(AFish fish)
+        {
+            return (Math.Max(Location.X - 30, fish.Location.X - 25) < Math.Min(Location.X + 30, fish.Location.X + 25))
+            && (Math.Max(Location.Y - 15, fish.Location.Y - 10) < Math.Min(Location.Y + 15, fish.Location.Y + 10));
+        }
+
         protected override PointF GetNextPoint()
         {
-            if (Victim == null)
-                Victim = FindNextVictim();
+            var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
+
             if (Victim != null)
+                if (!IsInside(Victim))
+                {
+                    Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
+                    nextPoint = new PointF(Location.X + (float)Speed * Direction.X,
+                                           Location.Y + (float)Speed * Direction.Y);
+                    return nextPoint;
+                }
+                else
+                    Victim = null;
+
+            if (Victim == null && !IsPointBelongAquarium(nextPoint))
             {
-                Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
-                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-                return nextPoint;
+                Victim = FindNextVictim();
+                return base.GetNextPoint();
             }
-            return base.GetNextPoint();
+
+             return base.GetNextPoint();
         }
     }
 }

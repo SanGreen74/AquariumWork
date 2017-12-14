@@ -25,17 +25,17 @@ namespace AquariumLibrary.BaseClasses
             var location = new PointF();
             var size = new SizeF();
             _gameObjects = new List<AGameObject>();
-            for (var i = 1; i < 3; i++)
+            for (var i = 1; i < 2; i++)
             {
-                location = new PointF(30, i*10);
+                location = new PointF(30, i + 10);
                 size = new SizeF(50,20);
                 _gameObjects.Add(new BlueNeon(location, size, this));
                 
             }
             location = new PointF(200, 200);
             size = new SizeF(60, 30);
-            //_gameObjects.Add(new Piranha(location, size, this));
-            _gameObjects.Add(new SwordsMan(new PointF((Random1.rnd.Next(60)),(Random1.rnd.Next(60))), new SizeF(100, 50), this));
+            _gameObjects.Add(new Piranha(location, size, this));
+            //_gameObjects.Add(new SwordsMan(new PointF((Random1.rnd.Next(60)),(Random1.rnd.Next(60))), new SizeF(100, 50), this));
         }
 
         public Size Size { get; }

@@ -15,7 +15,7 @@ namespace AquariumWF
         private IAquarium _aquarium;
         public Form()
         {
-            _aquarium = new Aquarium(new Size(900, 900));
+            _aquarium = new Aquarium(new Size(900, 600));
             Size = new Size(1000, 1000);
             DoubleBuffered = true;
             Init();
