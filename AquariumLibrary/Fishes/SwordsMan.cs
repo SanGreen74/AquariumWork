@@ -21,6 +21,8 @@ namespace AquariumLibrary.Fishes
 
         private double officialSpeed = 1.2;
 
+        private double maxSpeed = 2.6;
+
         public AFish Victim
         {
             get
@@ -48,19 +50,34 @@ namespace AquariumLibrary.Fishes
             return null;
         }
 
+        public bool Caution()
+        {
+            var caution = false;
+            foreach (var fish in Aquarium.GetFishes())
+            {
+                caution = (GetSizeOf(fish.Size) > GetSizeOf(Size) && IsNoticed(fish));
+                if (caution)
+                    return caution;
+            }
+            return caution;
+        }
+
         protected override PointF GetNextPoint()
         {
             if (Victim == null)
             {
-                Victim = FindNextVictim();
-                Speed = officialSpeed;
+                if (Caution())
+                    Speed = maxSpeed;
+                else
+                {
+                    Victim = FindNextVictim();
+                    Speed = officialSpeed;
+                }
             }
             if (Victim != null && IsNoticed(Victim))
             {
-                Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
-                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-                Speed += Speed * 0.0035; 
-                return nextPoint;
+                Speed = maxSpeed;
+                return GetVictimNextPoint();
             }
             return base.GetNextPoint();
         }
@@ -80,6 +97,13 @@ namespace AquariumLibrary.Fishes
         public double GetSizeOf(SizeF size)
         {
             return size.Height * size.Width;
+        }
+
+        public PointF GetVictimNextPoint()
+        {
+            Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
+            var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
+            return nextPoint;
         }
     }
 }
