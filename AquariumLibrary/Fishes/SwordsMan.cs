@@ -21,7 +21,7 @@ namespace AquariumLibrary.Fishes
 
         private double officialSpeed = 1.2;
 
-        private double maxSpeed = 2.6;
+        private double maxSpeed = 1.2;
 
         public AFish Victim
         {

@@ -10,12 +10,12 @@ using AquariumLibrary.BaseClasses;
 
 namespace AquariumLibrary.Fishes
 {
-    class Piranha : AFish, IHunter
+    public class Piranha : AFish, IHunter
     {
         public Piranha(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 2;
+            Speed = 1;
         }
 
         private AFish _victim;
@@ -34,14 +34,7 @@ namespace AquariumLibrary.Fishes
 
         public AFish FindNextVictim()
         {
-            foreach (var fish in Aquarium.GetFishes())
-            {
-                if (Random1.rnd.Next(2) == 0)
-                {
-                    return fish;
-                }
-            }
-            return null;
+            return Aquarium.GetFishes().FirstOrDefault(fish => Random1.rnd.Next(400) == 0);
         }
 
         public bool IsInside(AFish fish)
@@ -65,13 +58,22 @@ namespace AquariumLibrary.Fishes
                 else
                     Victim = null;
 
-            if (Victim == null && !IsPointBelongAquarium(nextPoint))
+            if (Victim == null && IsPointBelongAquarium(nextPoint))
             {
                 Victim = FindNextVictim();
                 return base.GetNextPoint();
             }
 
              return base.GetNextPoint();
+        }
+
+        protected override void HandleCollision(AFish fish)
+        {
+            if (!FoodSet.Contains(fish.GetType()) || Victim != fish) return;
+            Victim = null;
+            fish.Die();
+            var bn3 = new BlueNeon(new PointF(150, 50), new SizeF(30, 15), Aquarium);
+
         }
     }
 }

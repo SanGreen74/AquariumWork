@@ -8,7 +8,7 @@ using AquariumLibrary.Interfaces;
 
 namespace AquariumLibrary.AbstractClasses
 {
-    public abstract class AGameObject : ICollision
+    public abstract class AGameObject
     {
 
         /// <summary>
@@ -22,6 +22,7 @@ namespace AquariumLibrary.AbstractClasses
             Location = location;
             Size = size;
             Aquarium = aquarium;
+            Aquarium.AddNewGameObject(this);
         }
 
         /// <summary>
@@ -33,11 +34,6 @@ namespace AquariumLibrary.AbstractClasses
         /// Размер объекта
         /// </summary>
         public SizeF Size { get; protected set; }
-
-        /// <summary>
-        /// Скорость рыбы
-        /// </summary>
-        public double Speed { get; protected set; }
 
         /// <summary>
         /// Координаты объекта
@@ -58,18 +54,6 @@ namespace AquariumLibrary.AbstractClasses
             var otherLocation = otherObject.Location;
             return Math.Sqrt((Location.X - otherLocation.X) * (Location.X - otherLocation.X)
                              + (Location.Y - otherLocation.Y) * (Location.Y - otherLocation.Y));
-        }
-
-        public bool IsPointInside(PointF point)
-        {
-            var rectangle = Rectangle;
-            return rectangle.Left < point.X && point.X < rectangle.Right &&
-                   rectangle.Top < point.Y && point.Y < rectangle.Bottom;
-        }
-
-        public bool IsCollision(AGameObject otherGameObject)
-        {
-            return Rectangle.IntersectsWith(otherGameObject.Rectangle);
         }
     }
 

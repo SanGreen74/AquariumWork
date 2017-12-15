@@ -54,6 +54,7 @@
     <Compile Include="AbstractClasses\AFish.cs" />
     <Compile Include="AbstractClasses\AGameObject.cs" />
     <Compile Include="BaseClasses\Aquarium.cs" />
+    <Compile Include="BaseClasses\Brain.cs" />
     <Compile Include="BaseClasses\Random1.cs" />
     <Compile Include="BaseClasses\VectorF.cs" />
     <Compile Include="Fishes\BlueNeon.cs" />
@@ -64,7 +65,9 @@
     <Compile Include="Interfaces\ICollision.cs" />
     <Compile Include="Interfaces\IHunter.cs" />
     <Compile Include="Interfaces\IMovable.cs" />
+    <Compile Include="Interfaces\IThinker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\AquariumShould.cs" />
     <Compile Include="Tests\GameObjectShould.cs" />
     <Compile Include="Tests\VectorFShould.cs" />
   </ItemGroup>
