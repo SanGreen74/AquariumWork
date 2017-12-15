@@ -37,18 +37,12 @@ namespace AquariumLibrary.Fishes
             return Aquarium.GetFishes().FirstOrDefault(fish => Random1.rnd.Next(400) == 0);
         }
 
-        public bool IsInside(AFish fish)
-        {
-            return (Math.Max(Location.X - 30, fish.Location.X - 25) < Math.Min(Location.X + 30, fish.Location.X + 25))
-            && (Math.Max(Location.Y - 15, fish.Location.Y - 10) < Math.Min(Location.Y + 15, fish.Location.Y + 10));
-        }
-
         protected override PointF GetNextPoint()
         {
             var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
 
             if (Victim != null)
-                if (!IsInside(Victim))
+                if (!IsCollision(Victim))
                 {
                     Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
                     nextPoint = new PointF(Location.X + (float)Speed * Direction.X,
