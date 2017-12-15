@@ -15,7 +15,7 @@ namespace AquariumLibrary.Fishes
         public Piranha(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 2;
+            Speed = 3;
         }
 
         private AFish _victim;

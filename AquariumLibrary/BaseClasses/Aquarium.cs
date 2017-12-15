@@ -35,6 +35,9 @@ namespace AquariumLibrary.BaseClasses
             location = new PointF(200, 200);
             size = new SizeF(60, 30);
             _gameObjects.Add(new Piranha(location, size, this));
+            location = new PointF(200, Size.Height-100);
+            size = new SizeF(100, 50);
+            _gameObjects.Add(new Catfish(location, size, this));
         }
 
         public Size Size { get; }
