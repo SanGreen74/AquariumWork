@@ -29,6 +29,25 @@ namespace AquariumLibrary.Interfaces
         /// Принадлежит ли точка point аквариуму
         /// </summary>
         /// <param name="point">точка</param>
-        bool IsPointBelongAquarium(PointF point);
+        bool IsPointBelong(PointF point);
+
+
+        /// <summary>
+        /// Проверяет координаты на корректность относительно ширины и высоты аквариума.
+        /// </summary>
+        /// <param name="position"></param>
+        bool IsCorrectLocation(PointF position);
+
+        /// <summary>
+        /// Добавляет новый объект newGameObject в аквариум.
+        /// </summary>
+        /// <param name="newGameObject"></param>
+        void AddNewGameObject(AGameObject newGameObject);
+
+        /// <summary>
+        /// Удаляет из аквариума элемента gameObject если таковой имеется в аквариуме
+        /// </summary>
+        /// <param name="gameObject"></param>
+        void RemoveGameObject(AGameObject gameObject);
     }
 }

@@ -12,38 +12,18 @@ namespace AquariumLibrary.BaseClasses
 {
     public class Aquarium : IAquarium
     {
-        private List<AGameObject> _gameObjects;
+        private HashSet<AGameObject> _gameObjects;
 
         public Aquarium(Size size)
         {
             Size = size;
-            Init();
-        }
-
-        private void Init()
-        {
-            var location = new PointF();
-            var size = new SizeF();
-            _gameObjects = new List<AGameObject>();
-            for (var i = 1; i < 3; i++)
-            {
-                location = new PointF(30, i*10);
-                size = new SizeF(50,20);
-                _gameObjects.Add(new BlueNeon(location, size, this));
-                
-            }
-            location = new PointF(200, 200);
-            size = new SizeF(60, 30);
-            _gameObjects.Add(new Piranha(location, size, this));
-            location = new PointF(200, Size.Height-100);
-            size = new SizeF(100, 50);
-            _gameObjects.Add(new Catfish(location, size, this));
+            _gameObjects = new HashSet<AGameObject>();
         }
 
         public Size Size { get; }
         public IEnumerable<AGameObject> GetGameObjects()
         {
-            throw new NotImplementedException();
+            return _gameObjects;
         }
 
         public IEnumerable<AFish> GetFishes()
@@ -51,7 +31,24 @@ namespace AquariumLibrary.BaseClasses
             return _gameObjects.OfType<AFish>();
         }
 
-        public bool IsPointBelongAquarium(PointF point)
+        public void AddNewGameObject(AGameObject newGameObject)
+        {
+            if (!IsCorrectLocation(newGameObject.Location))
+                throw new ArgumentException();
+            _gameObjects.Add(newGameObject);
+        }
+
+        public void RemoveGameObject(AGameObject gameObject)
+        {
+            if (_gameObjects.Contains(gameObject))
+                _gameObjects.Remove(gameObject);
+        }
+
+        public bool IsCorrectLocation(PointF position)
+        {
+            return 0 <= position.X && position.X <= Size.Width && 0 <= position.Y && position.Y <= Size.Height;
+        }
+        public bool IsPointBelong(PointF point)
         {
             return (0 < point.X && point.X < this.Size.Width &&
                     0 < point.Y && point.Y < this.Size.Height);

@@ -8,7 +8,7 @@ using AquariumLibrary.AbstractClasses;
 
 namespace AquariumLibrary.Interfaces
 {
-    public interface ICollision
+    public interface ICollision<T>
     {
         /// <summary>
         /// Принадлежит ли точка point объекту
@@ -17,9 +17,15 @@ namespace AquariumLibrary.Interfaces
         bool IsPointInside(PointF point);
 
         /// <summary>
-        /// Есть ли соприкосновение с объектом otherGameObject
+        /// Есть ли соприкосновение с объектом anotherObject
         /// </summary>
-        /// <param name="otherGameObject"></param>
-        bool IsCollision(AGameObject otherGameObject);
+        /// <param name="anotherObject"></param>
+        bool IsCollision(T anotherObject);
+
+        /// <summary>
+        /// Обрабатывает столкновение с объектом anotherObject
+        /// </summary>
+        /// <param name="anotherObject">Объект, с которым обрабатывается столкновение</param>
+        void OnCollision(T anotherObject);
     }
 }

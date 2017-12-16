@@ -10,12 +10,12 @@ using AquariumLibrary.BaseClasses;
 
 namespace AquariumLibrary.Fishes
 {
-    class Piranha : AFish, IHunter
+    public class Piranha : AFish, IHunter
     {
         public Piranha(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 3;
+            Speed = 1;
         }
 
         private AFish _victim;
@@ -34,27 +34,40 @@ namespace AquariumLibrary.Fishes
 
         public AFish FindNextVictim()
         {
-            foreach (var fish in Aquarium.GetFishes())
-            {
-                if (Random1.rnd.Next(10) == 0)
-                {
-                    return fish;
-                }
-            }
-            return null;
+            return Aquarium.GetFishes().FirstOrDefault(fish => Random1.rnd.Next(400) == 0);
         }
 
         protected override PointF GetNextPoint()
         {
-            if (Victim == null)
-                Victim = FindNextVictim();
+            var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
+
             if (Victim != null)
+                if (!IsCollision(Victim))
+                {
+                    Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
+                    nextPoint = new PointF(Location.X + (float)Speed * Direction.X,
+                                           Location.Y + (float)Speed * Direction.Y);
+                    return nextPoint;
+                }
+                else
+                    Victim = null;
+
+            if (Victim == null && IsPointBelongAquarium(nextPoint))
             {
-                Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
-                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-                return nextPoint;
+                Victim = FindNextVictim();
+                return base.GetNextPoint();
             }
-            return base.GetNextPoint();
+
+             return base.GetNextPoint();
+        }
+
+        protected override void HandleCollision(AFish fish)
+        {
+            if (!FoodSet.Contains(fish.GetType()) || Victim != fish) return;
+            Victim = null;
+            fish.Die();
+            var bn3 = new BlueNeon(new PointF(150, 50), new SizeF(30, 15), Aquarium);
+
         }
     }
 }

@@ -17,8 +17,8 @@ namespace AquariumLibrary.Fishes
             while(true)
             {
                 var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-                if (Aquarium.IsPointBelongAquarium(nextPoint) && nextPoint.Y > CatfishBroad) return nextPoint;
-                Direction = Direction.Rotate(random.Next(0, 180));
+                if (Aquarium.IsPointBelong(nextPoint) && nextPoint.Y > CatfishBroad) return nextPoint;
+                Direction.Rotate(random.Next(0, 180));
             }
         }
         public Catfish(PointF location, SizeF size, IAquarium aquarium)
