@@ -12,7 +12,7 @@ namespace AquariumLibrary.Fishes
         public Piranha(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed =3;
+            Speed = 1;
             PushState(Walking);
         }
 

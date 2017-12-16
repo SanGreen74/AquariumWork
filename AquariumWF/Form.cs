@@ -14,13 +14,9 @@ namespace AquariumWF
         public Form()
         {
             _aquarium = new Aquarium(new Size(1200, 600));
-            BlueNeon bn;
-            PointF p = new PointF(0,0);
-            for (var i = 0; i < 40; i++)
-            {
-                p = new PointF(Random1.rnd.Next(1,1200), Random1.rnd.Next(1,600));
-                bn = new BlueNeon(p, new SizeF(20,10),_aquarium);
-            }
+
+            var bn = new BlueNeon(new PointF(100, 100), new SizeF(20, 10), _aquarium);
+            var piranha = new Piranha(new PointF(900, 500), new SizeF(50, 20), _aquarium);
             Size = new Size(1000, 1000);
             DoubleBuffered = true;
             Init();

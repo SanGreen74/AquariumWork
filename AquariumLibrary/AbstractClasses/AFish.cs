@@ -14,7 +14,7 @@ namespace AquariumLibrary.AbstractClasses
         public double Speed { get; protected set; }
         public FishType FishType { get; protected set; }
 
-        private VectorF _direction = VectorF.Rigth;
+        private VectorF _direction = VectorF.RandomVectorF;
         private Brain _brain;
 
         /// <summary>

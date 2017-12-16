@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Linq;
 using AquariumLibrary.AbstractClasses;
 using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Interfaces;
@@ -11,30 +12,83 @@ namespace AquariumLibrary.Fishes
             : base(location, size, aquarium)
         {
             Speed = 2.24;
-            //Flock = Aquarium.DistributeToFlock(this);
             PushState(Walking);
         }
 
-        public Flock Flock;
+        private const int SafeDistance = 50;
+
         private void Walking()
         {
-            var point = GetNextPoint();
-            MoveTo(point);
+            var danger = IsDangerous();
+            if (danger != null && danger.IsDanger)
+            {
+                PushState(RunAway);
+                return;
+            }
+            MoveTo(GetNextPoint());
         }
 
-        protected override PointF GetNextPoint()
+        private Danger IsDangerous()
         {
-            if (Flock == null) return base.GetNextPoint();
-            if (Flock.Leader == this) return base.GetNextPoint();
-            var point = Flock.GetChildrenPosition(this);
-            Direction = new VectorF(point.X - Location.X, point.Y - Location.Y);
-            var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-            if (!Aquarium.IsPointBelong(nextPoint)) return base.GetNextPoint();
-            return nextPoint;
+            var nearestHunter = GetNearestHunter();
+            return nearestHunter == null ? 
+                null : new Danger(nearestHunter, DistanceTo(nearestHunter) < SafeDistance);
+        }
+
+        private void RunAway()
+        {
+            var danger = IsDangerous();
+            if (danger == null || !danger.IsDanger)
+            {
+                PopState();
+                return;
+            }
+            RunAwayFrom(danger.Hunter);
+        }
+
+        private void RunAwayFrom(AFish hunter)
+        {
+            if (IsLocationInCorner())
+                return;
+            var coordX = Location.X - hunter.Location.X;
+            var coordY = Location.Y - hunter.Location.Y;
+            Direction = new VectorF(coordX, coordY);
+            MoveTo(GetNextPoint());
+        }
+
+        private AFish GetNearestHunter()
+        {
+            var fish = Aquarium
+                .GetFishes()
+                .Where(x => x is IHunter)
+                .FirstOrDefault(x => ((IHunter) x).Victim == this);
+            return fish;
         }
 
         public override void OnCollision(AFish anotherObject)
         {
+            if (anotherObject is IHunter)
+                Aquarium.RemoveObject(this);
+        }
+
+        private bool IsLocationInCorner()
+        {
+            var p1 = new VectorF(Location, new PointF(0, 0));
+            var p2 = new VectorF(Location, new PointF(Aquarium.Size.Width, 0));
+            var p3 = new VectorF(Location, new PointF(0, Aquarium.Size.Height));
+            var p4 = new VectorF(Location, new PointF(Aquarium.Size.Width, Aquarium.Size.Height));
+            return p1.GetLength() < 30 || p2.GetLength() < 30 || p3.GetLength() < 30 || p4.GetLength() < 30;
+        }
+
+        private class Danger
+        {
+            public readonly AFish Hunter;
+            public readonly bool IsDanger;
+            public Danger(AFish hunter, bool isDanger)
+            {
+                IsDanger = isDanger;
+                Hunter = hunter;
+            }
         }
     }
 }

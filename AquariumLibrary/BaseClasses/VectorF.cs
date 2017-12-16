@@ -142,5 +142,7 @@ namespace AquariumLibrary.BaseClasses
             var newY = X * Math.Sin(angle) + Y * Math.Cos(angle);
             return new VectorF((float)newX, (float)newY);
         }
+
+        public static VectorF RandomVectorF => new VectorF(Random1.rnd.Next(1,180), Random1.rnd.Next(1,180));
     }
 }
