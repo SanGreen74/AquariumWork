@@ -1,10 +1,7 @@
 ﻿using AquariumLibrary.AbstractClasses;
 using AquariumLibrary.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using AquariumLibrary.BaseClasses;
 
@@ -15,7 +12,8 @@ namespace AquariumLibrary.Fishes
         public Piranha(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 1;
+            Speed =3;
+            PushState(Walking);
         }
 
         private AFish _victim;
@@ -37,6 +35,11 @@ namespace AquariumLibrary.Fishes
             return Aquarium.GetFishes().FirstOrDefault(fish => Random1.rnd.Next(400) == 0);
         }
 
+        public void Walking()
+        {
+            MoveTo(GetNextPoint());
+        }
+
         protected override PointF GetNextPoint()
         {
             var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
@@ -52,7 +55,7 @@ namespace AquariumLibrary.Fishes
                 else
                     Victim = null;
 
-            if (Victim == null && IsPointBelongAquarium(nextPoint))
+            if (Victim == null && Aquarium.IsPointBelong(nextPoint))
             {
                 Victim = FindNextVictim();
                 return base.GetNextPoint();
@@ -61,13 +64,11 @@ namespace AquariumLibrary.Fishes
              return base.GetNextPoint();
         }
 
-        protected override void HandleCollision(AFish fish)
+        public override void OnCollision(AFish anotherObject)
         {
-            if (!FoodSet.Contains(fish.GetType()) || Victim != fish) return;
+            if (!(anotherObject is BlueNeon neon) || Victim != anotherObject) return;
+            neon.Die();
             Victim = null;
-            fish.Die();
-            var bn3 = new BlueNeon(new PointF(150, 50), new SizeF(30, 15), Aquarium);
-
         }
     }
 }

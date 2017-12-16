@@ -82,6 +82,11 @@ namespace AquariumLibrary.Fishes
             return base.GetNextPoint();
         }
 
+        public override void OnCollision(AFish anotherObject)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Находится ли жертва anotherFish в зоне видимости
         /// </summary>

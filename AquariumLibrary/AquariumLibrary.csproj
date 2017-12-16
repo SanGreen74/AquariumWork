@@ -55,6 +55,7 @@
     <Compile Include="AbstractClasses\AGameObject.cs" />
     <Compile Include="BaseClasses\Aquarium.cs" />
     <Compile Include="BaseClasses\Brain.cs" />
+    <Compile Include="BaseClasses\Flock.cs" />
     <Compile Include="BaseClasses\Random1.cs" />
     <Compile Include="BaseClasses\VectorF.cs" />
     <Compile Include="Fishes\BlueNeon.cs" />

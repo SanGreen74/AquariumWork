@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Interfaces;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace AquariumLibrary.AbstractClasses
 {
-    public abstract class AFish : AGameObject, IMovable, ICollision<AFish>, IThinker<AFish>
+    public abstract class AFish : AGameObject, IMovable, ICollision<AFish>
     {
         /// <summary>
         /// Скорость рыбы
         /// </summary>
         public double Speed { get; protected set; }
-        public Brain<AFish> Brain { get; protected set; }
+        public FishType FishType { get; protected set; }
 
-        protected VectorF _direction = VectorF.Rigth;
+        private VectorF _direction = VectorF.Rigth;
+        private Brain _brain;
 
         /// <summary>
         /// Еденичный нормализованный вектор, указывающий направление рыбы
@@ -24,25 +23,17 @@ namespace AquariumLibrary.AbstractClasses
         /// <remarks>Не еденичный вектор нормализуется и принудительно приводится к еденичному</remarks>
         public VectorF Direction
         {
-            get => _direction;
-            set => _direction = Math.Abs(1 - value.GetLength()) > 0.1 ?
-                                value.Normalized : value;
+            get { return _direction; }
+            set
+            {
+                _direction = Math.Abs(1 - value.GetLength()) > 0.1 ?
+                               value.Normalized : value;
+            }
         }
 
-        /// <summary>
-        /// Принадлежит ли точка point аквариуму
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        protected bool IsPointBelongAquarium(PointF point)
+        public void MoveTo(PointF point)
         {
-            return 0 < point.X && point.X < Aquarium.Size.Width &&
-                   0 < point.Y && point.Y < Aquarium.Size.Height;
-        }
-
-        public void Move()
-        {
-            Location = GetNextPoint();
+            Location = point;
         }
 
         protected virtual PointF GetNextPoint()
@@ -50,14 +41,14 @@ namespace AquariumLibrary.AbstractClasses
             while (true)
             {
                 var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-                if (IsPointBelongAquarium(nextPoint)) return nextPoint;
+                if (Aquarium.IsPointBelong(nextPoint)) return nextPoint;
                 Direction = Direction.Rotate(Random1.rnd.Next(0, 180));
             }
         }
 
         public void Die()
         {
-            Aquarium.RemoveGameObject(this);
+            Aquarium.RemoveObject(this);
         }
 
         public bool IsPointInside(PointF point)
@@ -74,16 +65,42 @@ namespace AquariumLibrary.AbstractClasses
 
         public abstract void OnCollision(AFish anotherObject);
 
+        public void HandleCollisions()
+        {
+            Aquarium.GetFishes().ToList().ForEach(x =>
+            {
+                if (x.IsCollision(this))
+                    x.OnCollision(this);
+            });
+        }
+        public override void Update()
+        {
+            _brain.Update();
+        }
+
         protected AFish(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
+            _brain = new Brain();
         }
 
-        public abstract void Update();
-
-        public void SetBrain(Brain<AFish> brain)
+        protected void PushState(Action state)
         {
-            Brain = brain ?? throw new ArgumentNullException(nameof(brain));
+            if (state != null)
+                _brain.PushState(state);
         }
+
+        protected void PopState()
+        {
+            _brain.PopState();
+        }
+    }
+
+    public enum FishType
+    {
+        BlueNeon,
+        Piranha,
+        Catfish,
+        SwordsMan
     }
 }

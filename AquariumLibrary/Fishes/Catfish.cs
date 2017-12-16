@@ -1,15 +1,11 @@
 ﻿using AquariumLibrary.AbstractClasses;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AquariumLibrary.Interfaces;
 using System.Drawing;
 
 namespace AquariumLibrary.Fishes
 {
-    class Catfish : AFish
+    public class Catfish : AFish
     {
         protected override PointF GetNextPoint()
         {
@@ -21,21 +17,24 @@ namespace AquariumLibrary.Fishes
                 Direction.Rotate(random.Next(0, 180));
             }
         }
+
+        public override void OnCollision(AFish anotherObject)
+        {
+            throw new NotImplementedException();
+        }
+
         public Catfish(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
             if (CheckCorrectLocation(location) == false)
-                throw new ArgumentException("точка не принадлежит области обитания");
+                throw new ArgumentException("Точка не принадлежит области обитания");
             Speed = 2;
             CatfishBroad = Aquarium.Size.Height / 2.0;
         }
         private double CatfishBroad;
         private bool CheckCorrectLocation(PointF location)
         {
-            if (location.Y >= CatfishBroad)
-                return true;
-            else
-                return false;
+            return location.Y >= CatfishBroad;
         }
 
     }

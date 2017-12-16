@@ -10,20 +10,13 @@ namespace AquariumLibrary.BaseClasses
     /// <summary>
     /// Мозг, вызывающий обработку актуального состояния
     /// </summary>
-    /// <typeparam name="T">Объект, к которому применяется мозг</typeparam>
-    public class Brain<T>
-        where T : class
+    /// <typeparam name="T">Объект, за которым закрепляется мозг</typeparam>
+    public class Brain
     {
-        private readonly T _host;
         private readonly Stack<Action> _states;
 
-        /// <summary>
-        /// Создает новый экземляр мозга, указывая его обладателя host
-        /// </summary>
-        /// <param name="host">Хозяин, к которому привязывается текущий мозг</param>
-        public Brain(T host)
+        public Brain()
         {
-            _host = host;
             _states = new Stack<Action>();
         }
 
@@ -36,7 +29,6 @@ namespace AquariumLibrary.BaseClasses
                 _states.Peek().Invoke();
         }
 
-
         /// <summary>
         /// Добавляет новое состояние newState, которое будет являться актуальным, до тех пор
         /// пока не будет оно не будет удалено.
@@ -46,7 +38,6 @@ namespace AquariumLibrary.BaseClasses
         {
             _states.Push(newState);
         }
-
 
         /// <summary>
         /// Удаляет последнее добавленное состояние.

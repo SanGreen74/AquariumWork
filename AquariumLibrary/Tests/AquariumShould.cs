@@ -44,7 +44,7 @@ namespace AquariumLibrary.Tests
             var randomCount = new Random().Next(1, 50);
             for (var i = 0; i < randomCount; i++)
                 neon = new BlueNeon(new PointF(10, 10), new SizeF(10, 10), _aquarium);
-            _aquarium.RemoveGameObject(neon);
+            _aquarium.RemoveObject(neon);
             _aquarium.GetGameObjects().Count().Should().Be(randomCount - 1);
         }
     }

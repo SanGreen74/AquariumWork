@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Fishes;
@@ -16,14 +13,14 @@ namespace AquariumWF
         private IAquarium _aquarium;
         public Form()
         {
-            _aquarium = new Aquarium(new Size(900, 600));
-            var bn = new BlueNeon(new PointF(50, 50), new SizeF(30, 15), _aquarium);
-            var bn1 = new BlueNeon(new PointF(80, 50), new SizeF(30, 15), _aquarium);
-            var bn2 = new BlueNeon(new PointF(110, 50), new SizeF(30, 15), _aquarium);
-            var bn3 = new BlueNeon(new PointF(150, 50), new SizeF(30, 15), _aquarium);
-
-
-            var pr = new Piranha(new PointF(250,200), new SizeF(70,30), _aquarium);
+            _aquarium = new Aquarium(new Size(1200, 600));
+            BlueNeon bn;
+            PointF p = new PointF(0,0);
+            for (var i = 0; i < 40; i++)
+            {
+                p = new PointF(Random1.rnd.Next(1,1200), Random1.rnd.Next(1,600));
+                bn = new BlueNeon(p, new SizeF(20,10),_aquarium);
+            }
             Size = new Size(1000, 1000);
             DoubleBuffered = true;
             Init();
@@ -38,7 +35,12 @@ namespace AquariumWF
             var frames = new Timer() { Interval = 15 };
             frames.Tick += (sender, args) =>
             {
-                _aquarium.GetFishes().ToList().ForEach(x=>x.Update());
+                _aquarium.GetFishes().ToList().ForEach(x =>
+                {
+                    x.Update();
+                    x.HandleCollisions();
+
+                });
             };
             frames.Start();
         }

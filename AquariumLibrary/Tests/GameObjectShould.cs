@@ -23,6 +23,7 @@ namespace AquariumLibrary.Tests
         [SetUp]
         public void SetUp()
         {
+            _aquarium = new Aquarium(new Size(500,500));
             _neon1 = new BlueNeon(new PointF(10f, 10f), _defaultFishSize, _aquarium);
             _neon2 = new BlueNeon(new PointF(9f, 9f), _defaultFishSize, _aquarium);
             _neon3 = new BlueNeon(new PointF(8f, 8f), _defaultFishSize, _aquarium);

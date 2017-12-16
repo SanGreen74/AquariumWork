@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AquariumLibrary.Interfaces;
 
 namespace AquariumLibrary.AbstractClasses
 {
     public abstract class AGameObject
     {
-
         /// <summary>
         /// Создает новый экземпляр объекта
         /// </summary>
@@ -22,7 +17,7 @@ namespace AquariumLibrary.AbstractClasses
             Location = location;
             Size = size;
             Aquarium = aquarium;
-            Aquarium.AddNewGameObject(this);
+            Aquarium.AddObject(this);
         }
 
         /// <summary>
@@ -55,6 +50,11 @@ namespace AquariumLibrary.AbstractClasses
             return Math.Sqrt((Location.X - otherLocation.X) * (Location.X - otherLocation.X)
                              + (Location.Y - otherLocation.Y) * (Location.Y - otherLocation.Y));
         }
+
+        /// <summary>
+        /// Метод, обрабатывающий состояние объекта на каждой итерации
+        /// </summary>
+        public abstract void Update();
     }
 
 }

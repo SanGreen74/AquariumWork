@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AquariumLibrary.AbstractClasses;
+using AquariumLibrary.BaseClasses;
+using AquariumLibrary.Fishes;
 
 namespace AquariumLibrary.Interfaces
 {
@@ -42,12 +44,19 @@ namespace AquariumLibrary.Interfaces
         /// Добавляет новый объект newGameObject в аквариум.
         /// </summary>
         /// <param name="newGameObject"></param>
-        void AddNewGameObject(AGameObject newGameObject);
+        void AddObject(AGameObject newGameObject);
 
         /// <summary>
         /// Удаляет из аквариума элемента gameObject если таковой имеется в аквариуме
         /// </summary>
         /// <param name="gameObject"></param>
-        void RemoveGameObject(AGameObject gameObject);
+        void RemoveObject(AGameObject gameObject);
+
+        /// <summary>
+        /// Распределяет рыбу fish в стаю, возвращает стаю, в которую была распределена рыба.
+        /// </summary>
+        /// <param name="fish">Рыба</param>
+        /// <returns></returns>
+        Flock DistributeToFlock(AFish fish);
     }
 }
