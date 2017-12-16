@@ -26,10 +26,11 @@ namespace AquariumLibrary.Fishes
         public Catfish(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
+            CatfishBroad = Aquarium.Size.Height / 2.0;
+
             if (CheckCorrectLocation(location) == false)
                 throw new ArgumentException("Точка не принадлежит области обитания");
             Speed = 2;
-            CatfishBroad = Aquarium.Size.Height / 2.0;
         }
         private double CatfishBroad;
         private bool CheckCorrectLocation(PointF location)
