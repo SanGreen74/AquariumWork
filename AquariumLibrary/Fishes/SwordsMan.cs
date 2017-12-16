@@ -15,13 +15,16 @@ namespace AquariumLibrary.Fishes
         public SwordsMan(PointF location, SizeF size, IAquarium aquarium) : base(location, size, aquarium)
         {
             Speed = 1.2;
+            PushState(Walking);
         }
 
         private AFish _victim;
 
-        private double officialSpeed = 1.2;
+        private AFish _enemy;
 
-        private double maxSpeed = 1.2;
+        private double officialSpeed = 0.8;
+
+        private double maxSpeed = 1.8;
 
         public AFish Victim
         {
@@ -35,73 +38,68 @@ namespace AquariumLibrary.Fishes
             }
         }
 
-        public AFish FindNextVictim()
+        public AFish Enemy
         {
-            foreach (var fish in Aquarium.GetFishes())
+            get
             {
-                if (GetSizeOf(fish.Size) < GetSizeOf(Size) && IsNoticed(fish))
-                {
-                    //if (Random1.LowChanceOfAttac())
-                    //{
-                        return fish;
-                    //}
-                }
+                return _enemy;
             }
-            return null;
+            private set
+            {
+                _enemy = value;
+            }
         }
 
-        public bool Caution()
+        public void Walking()
         {
-            var caution = false;
-            foreach (var fish in Aquarium.GetFishes())
+            MoveTo(GetNextPoint());
+            Victim = FindNextVictim();
+            Enemy = CheckNearestEnemy();
+            if (Victim != null )
             {
-                caution = (GetSizeOf(fish.Size) > GetSizeOf(Size) && IsNoticed(fish));
-                if (caution)
-                    return caution;
+                if (Random1.LowChanceOfAttac())
+                {
+                    Speed = maxSpeed;
+                    PopState();
+                    PushState(Attack);
+                }
             }
-            return caution;
+            if (Enemy != null )
+            {
+                Speed = maxSpeed;
+                PushState(RunAway);
+            }
+        }
+
+        public void Attack()
+        {
+            MoveTo(GetVictimNextPoint());
+            if(DistanceTo(Victim) > Size.Width*1.5)
+            {
+                PopState();
+                Speed = officialSpeed;
+                PushState(Walking);
+            }
+        }
+
+        public void RunAway()
+        {
+            MoveTo(GetNextPoint());
+            if (DistanceTo(Enemy) > Size.Width * 1.5)
+            {
+                PopState();
+                Speed = officialSpeed;
+            }
         }
 
         protected override PointF GetNextPoint()
         {
-            if (Victim == null)
-            {
-                if (Caution())
-                    Speed = maxSpeed;
-                else
-                {
-                    Victim = FindNextVictim();
-                    Speed = officialSpeed;
-                }
-            }
-            if (Victim != null && IsNoticed(Victim))
-            {
-                Speed = maxSpeed;
-                return GetVictimNextPoint();
-            }
             return base.GetNextPoint();
         }
 
         public override void OnCollision(AFish anotherObject)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Находится ли жертва anotherFish в зоне видимости
-        /// </summary>
-        /// <param name="anotherFish">Жертва</param>
-        public bool IsNoticed(AFish anotherFish)
-        {
-            var radiusOfVisibility = Size.Width * 1.5;
-            var distanceToAnotherFish = Math.Sqrt((anotherFish.Location.X - Location.X) * (anotherFish.Location.X - Location.X)
-                                                + (anotherFish.Location.Y- Location.Y) * (anotherFish.Location.Y - Location.Y));
-            return radiusOfVisibility >= distanceToAnotherFish;
-        }
-
-        public double GetSizeOf(SizeF size)
-        {
-            return size.Height * size.Width;
+            
         }
 
         public PointF GetVictimNextPoint()
@@ -109,6 +107,24 @@ namespace AquariumLibrary.Fishes
             Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
             var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
             return nextPoint;
+        }
+
+        private AFish CheckNearestEnemy()
+        {
+            return Aquarium.GetFishes()
+               .Where(x => x.GetType() != typeof(SwordsMan))
+               .Where(x => DistanceTo(x) < Size.Width * 2)
+               .Where(x => x.Size.Height * x.Size.Width > Size.Width * Size.Height)
+               .FirstOrDefault();
+        }
+
+        public AFish FindNextVictim()
+        {
+            return Aquarium.GetFishes()
+                .Where(x => x.GetType() != typeof(SwordsMan))
+                .Where(x => DistanceTo(x) < Size.Width * 2)
+                .Where(x => x.Size.Height * x.Size.Width < Size.Width * Size.Height)
+                .FirstOrDefault();
         }
     }
 }
