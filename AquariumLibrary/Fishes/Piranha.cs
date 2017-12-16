@@ -66,9 +66,6 @@ namespace AquariumLibrary.Fishes
 
         public override void OnCollision(AFish anotherObject)
         {
-            if (!(anotherObject is BlueNeon neon) || Victim != anotherObject) return;
-            neon.Die();
-            Victim = null;
         }
     }
 }

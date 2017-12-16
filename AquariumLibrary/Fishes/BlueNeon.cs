@@ -35,11 +35,6 @@ namespace AquariumLibrary.Fishes
 
         public override void OnCollision(AFish anotherObject)
         {
-            if (anotherObject is IHunter hunter && hunter.Victim == this)
-            {
-                Flock.RemoveFish(this);
-                Die();
-            }
         }
     }
 }
