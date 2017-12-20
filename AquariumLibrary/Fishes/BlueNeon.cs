@@ -65,12 +65,6 @@ namespace AquariumLibrary.Fishes
             return fish;
         }
 
-        public override void OnCollision(AFish anotherObject)
-        {
-            if (anotherObject is IHunter)
-                Aquarium.RemoveObject(this);
-        }
-
         private bool IsLocationInCorner()
         {
             var p1 = new VectorF(Location, new PointF(0, 0));
@@ -78,6 +72,11 @@ namespace AquariumLibrary.Fishes
             var p3 = new VectorF(Location, new PointF(0, Aquarium.Size.Height));
             var p4 = new VectorF(Location, new PointF(Aquarium.Size.Width, Aquarium.Size.Height));
             return p1.GetLength() < 30 || p2.GetLength() < 30 || p3.GetLength() < 30 || p4.GetLength() < 30;
+        }
+
+        public override void OnCollision(AFish anotherObject)
+        {
+            
         }
 
         private class Danger
