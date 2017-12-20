@@ -10,13 +10,12 @@ namespace AquariumWF
 {
     public sealed class Form : System.Windows.Forms.Form
     {
-        private IAquarium _aquarium;
+        private readonly IAquarium _aquarium;
         public Form()
         {
             _aquarium = new Aquarium(new Size(1200, 600));
 
-            var bn = new BlueNeon(new PointF(100, 100), new SizeF(20, 10), _aquarium);
-            var piranha = new Piranha(new PointF(900, 500), new SizeF(50, 20), _aquarium);
+            //var piranha = new Piranha(new PointF(900, 500), new SizeF(50, 20), _aquarium);
             Size = new Size(1000, 1000);
             DoubleBuffered = true;
             Init();

@@ -46,11 +46,6 @@ namespace AquariumLibrary.AbstractClasses
             }
         }
 
-        public void Die()
-        {
-            Aquarium.RemoveObject(this);
-        }
-
         public bool IsPointInside(PointF point)
         {
             var rectangle = Rectangle;
@@ -93,6 +88,15 @@ namespace AquariumLibrary.AbstractClasses
         protected void PopState()
         {
             _brain.PopState();
+        }
+
+        public delegate void FishDieHandler(AFish fish);
+
+        public event FishDieHandler OnDie;
+
+        public void Die()
+        {
+            OnDie?.Invoke(this);
         }
     }
 
