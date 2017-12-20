@@ -32,40 +32,44 @@ namespace AquariumLibrary.Fishes
 
         public AFish FindNextVictim()
         {
-            return Aquarium.GetFishes().FirstOrDefault(fish => Randomizer.rnd.Next(400) == 0);
+            return Aquarium.GetFishes().FirstOrDefault(fish => Randomizer.LowChanceOfAttac() && fish.FishType != FishType.Piranha);
         }
 
         public void Walking()
         {
             MoveTo(GetNextPoint());
-        }
-
-        protected override PointF GetNextPoint()
-        {
-            var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-
+            Victim = FindNextVictim();
             if (Victim != null)
-                if (!IsCollision(Victim))
-                {
-                    Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
-                    nextPoint = new PointF(Location.X + (float)Speed * Direction.X,
-                                           Location.Y + (float)Speed * Direction.Y);
-                    return nextPoint;
-                }
-                else
-                    Victim = null;
-
-            if (Victim == null && Aquarium.IsPointBelong(nextPoint))
             {
-                Victim = FindNextVictim();
-                return base.GetNextPoint();
+                PushState(Attack, FishState.Attack);
             }
 
-             return base.GetNextPoint();
+        }
+
+        public void Attack()
+        {
+            if(Victim == null)
+            {
+                PopState();
+                return;
+            }
+            MoveTo(GetVictimNextPoint());
         }
 
         public override void OnCollision(AFish anotherObject)
         {
+            if(anotherObject == Victim)
+            {
+                Victim.Die();
+                Victim = null;
+            }
+        }
+
+        public PointF GetVictimNextPoint()
+        {
+            Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
+            var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
+            return nextPoint;
         }
     }
 }

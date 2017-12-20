@@ -78,6 +78,7 @@ namespace AquariumLibrary.Fishes
             {
                 PopState();
                 Speed = officialSpeed;
+                Victim = null;
                 PushState(Walking, FishState.Walking);
             }
         }
@@ -99,7 +100,12 @@ namespace AquariumLibrary.Fishes
 
         public override void OnCollision(AFish anotherObject)
         {
-            
+            if(anotherObject == Victim)
+            {
+                Victim.Die();
+                Victim = null;
+            }
+
         }
 
         public PointF GetVictimNextPoint()
