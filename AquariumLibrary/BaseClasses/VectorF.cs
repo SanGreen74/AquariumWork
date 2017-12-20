@@ -143,6 +143,6 @@ namespace AquariumLibrary.BaseClasses
             return new VectorF((float)newX, (float)newY);
         }
 
-        public static VectorF RandomVectorF => new VectorF(Random1.rnd.Next(1,180), Random1.rnd.Next(1,180));
+        public static VectorF RandomVectorF => new VectorF(Randomizer.rnd.Next(1,180), Randomizer.rnd.Next(1,180));
     }
 }

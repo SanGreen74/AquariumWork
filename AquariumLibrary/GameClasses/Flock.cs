@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AquariumLibrary.AbstractClasses;
-using NUnit.Framework.Api;
 
-namespace AquariumLibrary.BaseClasses
+namespace AquariumLibrary.GameClasses
 {
     public class Flock
     {

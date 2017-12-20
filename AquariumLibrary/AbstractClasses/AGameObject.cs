@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Interfaces;
 
 namespace AquariumLibrary.AbstractClasses
@@ -18,6 +19,7 @@ namespace AquariumLibrary.AbstractClasses
             Size = size;
             Aquarium = aquarium;
             Aquarium.AddObject(this);
+            Direction = VectorF.RandomVectorF;
         }
 
         /// <summary>
@@ -55,6 +57,22 @@ namespace AquariumLibrary.AbstractClasses
         /// Метод, обрабатывающий состояние объекта на каждой итерации
         /// </summary>
         public abstract void Update();
+
+        private VectorF _direction;
+
+        /// <summary>
+        /// Еденичный нормализованный вектор, указывающий направление рыбы
+        /// </summary>
+        /// <remarks>Не еденичный вектор нормализуется и принудительно приводится к еденичному</remarks>
+        public VectorF Direction
+        {
+            get { return _direction; }
+            set
+            {
+                _direction = Math.Abs(1 - value.GetLength()) > 0.1 ?
+                    value.Normalized : value;
+            }
+        }
     }
 
 }

@@ -64,6 +64,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -84,6 +85,17 @@
       <Project>{e7e23024-5cf3-4b98-af41-ec4e782e5c71}</Project>
       <Name>AquariumLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\Background\kreml.jpg" />
+    <Content Include="Resources\Fishes\mentos.png" />
+    <Content Include="Resources\Fishes\navalny.png" />
+    <Content Include="Resources\Fishes\navaыыlny.png" />
+    <None Include="Resources\kreml.jpg" />
+    <None Include="Resources\navalny.png" />
+    <None Include="Resources\mentos.png" />
+    <None Include="Resources\NavalnyAllStates.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

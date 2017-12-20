@@ -34,7 +34,7 @@ namespace AquariumLibrary.Fishes
             if (CheckCorrectLocation(location) == false)
                 throw new ArgumentException("Точка не принадлежит области обитания");
             Speed = 2;
-            PushState(Walking);
+            PushState(Walking, FishState.Walking);
         }
         private void Walking()
         {
@@ -44,7 +44,7 @@ namespace AquariumLibrary.Fishes
             if(vector.GetLength() < GetStepLength())
             {
                 nextPointSleep = null;
-                PushState(Sleep);
+                PushState(Sleep, FishState.Sleep);
                 return;
             }
             var point = GetNextPoint();
@@ -52,7 +52,6 @@ namespace AquariumLibrary.Fishes
         }
         private void Sleep()
         {
-            //todo
             MoveTo(Location);
         }
         private double CatfishBroad;
@@ -62,8 +61,8 @@ namespace AquariumLibrary.Fishes
         }
         private PointF RandomPoint()
         {
-            var rndX = Random1.rnd.Next((int)CatfishBroad, Aquarium.Size.Height);
-            var rndY = Random1.rnd.Next(0, Aquarium.Size.Width);
+            var rndX = Randomizer.rnd.Next((int)CatfishBroad, Aquarium.Size.Height);
+            var rndY = Randomizer.rnd.Next(0, Aquarium.Size.Width);
             var point1 = new PointF(rndX, rndY);
             return point1;
         }

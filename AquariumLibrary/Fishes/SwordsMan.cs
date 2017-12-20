@@ -15,7 +15,7 @@ namespace AquariumLibrary.Fishes
         public SwordsMan(PointF location, SizeF size, IAquarium aquarium) : base(location, size, aquarium)
         {
             Speed = 1.2;
-            PushState(Walking);
+            PushState(Walking, FishState.Walking);
         }
 
         private AFish _victim;
@@ -57,17 +57,17 @@ namespace AquariumLibrary.Fishes
             Enemy = CheckNearestEnemy();
             if (Victim != null )
             {
-                if (Random1.LowChanceOfAttac())
+                if (Randomizer.LowChanceOfAttac())
                 {
                     Speed = maxSpeed;
                     PopState();
-                    PushState(Attack);
+                    PushState(Attack, FishState.Attack);
                 }
             }
             if (Enemy != null )
             {
                 Speed = maxSpeed;
-                PushState(RunAway);
+                PushState(RunAway, FishState.RunAway);
             }
         }
 
@@ -78,7 +78,7 @@ namespace AquariumLibrary.Fishes
             {
                 PopState();
                 Speed = officialSpeed;
-                PushState(Walking);
+                PushState(Walking, FishState.Walking);
             }
         }
 

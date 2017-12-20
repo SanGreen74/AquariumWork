@@ -36,6 +36,9 @@
     <Reference Include="FluentAssertions.Core, Version=4.19.4.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.19.4\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
+    <Reference Include="MoreLinq.Portable, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MoreLinq.Portable.1.4.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\MoreLinq.Portable.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -54,11 +57,13 @@
   <ItemGroup>
     <Compile Include="AbstractClasses\AFish.cs" />
     <Compile Include="AbstractClasses\AGameObject.cs" />
-    <Compile Include="BaseClasses\Aquarium.cs" />
+    <Compile Include="GameClasses\Aquarium.cs" />
     <Compile Include="BaseClasses\Brain.cs" />
-    <Compile Include="BaseClasses\Flock.cs" />
-    <Compile Include="BaseClasses\Random1.cs" />
+    <Compile Include="GameClasses\Flock.cs" />
+    <Compile Include="BaseClasses\Randomizer.cs" />
     <Compile Include="BaseClasses\VectorF.cs" />
+    <Compile Include="Drawing\Drawer.cs" />
+    <Compile Include="Drawing\Interfaces\IDrawer.cs" />
     <Compile Include="Fishes\BlueNeon.cs" />
     <Compile Include="Fishes\Piranha.cs" />
     <Compile Include="Fishes\SwordsMan.cs" />
@@ -74,6 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Drawing\Classes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

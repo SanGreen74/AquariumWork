@@ -12,8 +12,8 @@ namespace AquariumLibrary.Fishes
         public Piranha(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 1;
-            PushState(Walking);
+            Speed = 4;
+            PushState(Walking, FishState.Walking);
         }
 
         private AFish _victim;
@@ -32,7 +32,7 @@ namespace AquariumLibrary.Fishes
 
         public AFish FindNextVictim()
         {
-            return Aquarium.GetFishes().FirstOrDefault(fish => Random1.rnd.Next(400) == 0);
+            return Aquarium.GetFishes().FirstOrDefault(fish => Randomizer.rnd.Next(400) == 0);
         }
 
         public void Walking()

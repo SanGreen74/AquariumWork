@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AquariumLibrary.AbstractClasses;
 using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Fishes;
+using AGameObject = AquariumLibrary.AbstractClasses.AGameObject;
 
 namespace AquariumLibrary.Interfaces
 {

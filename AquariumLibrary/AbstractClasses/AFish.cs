@@ -14,22 +14,9 @@ namespace AquariumLibrary.AbstractClasses
         public double Speed { get; protected set; }
         public FishType FishType { get; protected set; }
 
-        private VectorF _direction = VectorF.RandomVectorF;
-        private Brain _brain;
+        public FishState FishState => _brain.CurrentState;
 
-        /// <summary>
-        /// Еденичный нормализованный вектор, указывающий направление рыбы
-        /// </summary>
-        /// <remarks>Не еденичный вектор нормализуется и принудительно приводится к еденичному</remarks>
-        public VectorF Direction
-        {
-            get { return _direction; }
-            set
-            {
-                _direction = Math.Abs(1 - value.GetLength()) > 0.1 ?
-                               value.Normalized : value;
-            }
-        }
+        private readonly Brain _brain;
 
         public void MoveTo(PointF point)
         {
@@ -40,12 +27,12 @@ namespace AquariumLibrary.AbstractClasses
         {
             while (true)
             {
-                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
+                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, 
+                                           Location.Y + (float)Speed * Direction.Y);
                 if (Aquarium.IsPointBelong(nextPoint)) return nextPoint;
-                Direction = Direction.Rotate(Random1.rnd.Next(0, 180));
+                Direction = Direction.Rotate(Randomizer.rnd.Next(0, 180));
             }
         }
-
         public bool IsPointInside(PointF point)
         {
             var rectangle = Rectangle;
@@ -79,10 +66,10 @@ namespace AquariumLibrary.AbstractClasses
             _brain = new Brain();
         }
 
-        protected void PushState(Action state)
+        protected void PushState(Action action, FishState state)
         {
-            if (state != null)
-                _brain.PushState(state);
+            if (action != null)
+                _brain.PushState(action, state);
         }
 
         protected void PopState()
@@ -90,9 +77,9 @@ namespace AquariumLibrary.AbstractClasses
             _brain.PopState();
         }
 
-        public delegate void FishDieHandler(AFish fish);
+        public delegate void FishHandler(AFish fish);
 
-        public event FishDieHandler OnDie;
+        public event FishHandler OnDie;
 
         public void Die()
         {
@@ -106,5 +93,14 @@ namespace AquariumLibrary.AbstractClasses
         Piranha,
         Catfish,
         SwordsMan
+    }
+
+    public enum FishState
+    {
+        Walking,
+        RunAway,
+        Sleep,
+        Attack,
+        None
     }
 }

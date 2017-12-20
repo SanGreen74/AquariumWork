@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Fishes;
+using AquariumLibrary.GameClasses;
 using AquariumLibrary.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace AquariumLibrary.BaseClasses
 {
-    public static class Random1
+    public static class Randomizer
     {
         public static Random rnd = new Random();
 
         public static bool LowChanceOfAttac()
         {
-            return (Random1.rnd.Next(400) == 1);
+            return (Randomizer.rnd.Next(400) == 1);
         }
     }
 }

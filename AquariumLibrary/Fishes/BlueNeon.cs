@@ -4,6 +4,7 @@ using System.Linq;
 using AquariumLibrary.AbstractClasses;
 using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Interfaces;
+using MoreLinq;
 
 namespace AquariumLibrary.Fishes
 {
@@ -12,19 +13,16 @@ namespace AquariumLibrary.Fishes
         public BlueNeon(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 2.24;
-            PushState(Walking);
+            Speed = 6;
+            PushState(Walking, FishState);
         }
         
-        private const int SafeDistance = 50;
+        private const int SafeDistance = 150;
         private const int CornerRadius = 30;
 
         public override void OnCollision(AFish anotherObject)
         {
-            var hunter = anotherObject as IHunter;
-            if (hunter == null || hunter.Victim != this)
-                return;
-            Die();
+
         }
 
         private void Walking()
@@ -32,7 +30,7 @@ namespace AquariumLibrary.Fishes
             var danger = IsDangerous();
             if (danger != null && danger.IsDanger)
             {
-                PushState(RunAway);
+                PushState(RunAway, FishState.RunAway);
                 return;
             }
             MoveTo(GetNextPoint());
@@ -59,6 +57,17 @@ namespace AquariumLibrary.Fishes
             MoveTo(GetNextPoint());
         }
 
+        protected override PointF GetNextPoint()
+        {
+            while (true)
+            {
+                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X*1.2f,
+                    Location.Y + (float)Speed * Direction.Y* 1.2f);
+                if (Aquarium.IsPointBelong(nextPoint)) return nextPoint;
+                Direction = Direction.Rotate(Randomizer.rnd.Next(0, 180));
+            }
+        }
+
         private Danger IsDangerous()
         {
             var nearestHunter = GetNearestHunter();
@@ -68,10 +77,14 @@ namespace AquariumLibrary.Fishes
 
         private AFish GetNearestHunter()
         {
+            var hunters = Aquarium.GetFishes().Where(x => x is IHunter);
+
+            return !hunters.Any() ? null : hunters.MinBy(DistanceTo);
+
             return Aquarium
                 .GetFishes()
                 .Where(x => x is IHunter)
-                .FirstOrDefault(x => ((IHunter)x).Victim == this);
+                .FirstOrDefault(/*x => ((IHunter)x).Victim == this*/);
         }
 
         private bool IsLocationInCorner()

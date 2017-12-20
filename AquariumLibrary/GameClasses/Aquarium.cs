@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using AquariumLibrary.AbstractClasses;
-using AquariumLibrary.Fishes;
+using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Interfaces;
+using AGameObject = AquariumLibrary.AbstractClasses.AGameObject;
 
-namespace AquariumLibrary.BaseClasses
+namespace AquariumLibrary.GameClasses
 {
     public class Aquarium : IAquarium
     {
