@@ -73,14 +73,15 @@ namespace AquariumLibrary.Fishes
 
         public void Attack()
         {
-            MoveTo(GetVictimNextPoint());
-            if(DistanceTo(Victim) > Size.Width*1.5)
+            if (Victim == null || DistanceTo(Victim) > Size.Width * 1.5)
             {
                 PopState();
                 Speed = officialSpeed;
                 Victim = null;
                 PushState(Walking, FishState.Walking);
             }
+            if (Victim != null)
+                MoveTo(GetVictimNextPoint());
         }
 
         public void RunAway()
