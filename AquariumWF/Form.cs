@@ -15,8 +15,12 @@ namespace AquariumWF
         {
             _aquarium = new Aquarium(new Size(1200, 600));
 
-            //var piranha = new Piranha(new PointF(900, 500), new SizeF(50, 20), _aquarium);
-            var catfish = new Catfish(new PointF(600, 500), new SizeF(70, 35), _aquarium);
+            var piranha = new Piranha(new PointF(900, 500), new SizeF(50, 20), _aquarium);
+            //var catfish = new Catfish(new PointF(600, 500), new SizeF(70, 35), _aquarium);
+            for (int i = 0; i < 10; i++)
+            {
+                var bn = new BlueNeon(new PointF(100, 100 + i * 10), new SizeF(30, 10), _aquarium);
+            }
             Size = new Size(1000, 1000);
             DoubleBuffered = true;
             Init();

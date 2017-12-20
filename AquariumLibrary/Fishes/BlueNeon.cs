@@ -21,10 +21,6 @@ namespace AquariumLibrary.Fishes
 
         public override void OnCollision(AFish anotherObject)
         {
-            var hunter = anotherObject as IHunter;
-            if (hunter == null || hunter.Victim != this)
-                return;
-            Die();
         }
 
         private void Walking()
@@ -86,10 +82,7 @@ namespace AquariumLibrary.Fishes
                 || p4.GetLength() < CornerRadius;
         }
 
-        public override void OnCollision(AFish anotherObject)
-        {
-            
-        }
+
 
         private class Danger
         {
