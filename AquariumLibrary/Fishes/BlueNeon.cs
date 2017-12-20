@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using AquariumLibrary.AbstractClasses;
 using AquariumLibrary.BaseClasses;
@@ -14,8 +15,17 @@ namespace AquariumLibrary.Fishes
             Speed = 2.24;
             PushState(Walking);
         }
-
+        
         private const int SafeDistance = 50;
+        private const int CornerRadius = 30;
+
+        public override void OnCollision(AFish anotherObject)
+        {
+            var hunter = anotherObject as IHunter;
+            if (hunter == null || hunter.Victim != this)
+                return;
+            Die();
+        }
 
         private void Walking()
         {
@@ -26,13 +36,6 @@ namespace AquariumLibrary.Fishes
                 return;
             }
             MoveTo(GetNextPoint());
-        }
-
-        private Danger IsDangerous()
-        {
-            var nearestHunter = GetNearestHunter();
-            return nearestHunter == null ? 
-                null : new Danger(nearestHunter, DistanceTo(nearestHunter) < SafeDistance);
         }
 
         private void RunAway()
@@ -56,13 +59,19 @@ namespace AquariumLibrary.Fishes
             MoveTo(GetNextPoint());
         }
 
+        private Danger IsDangerous()
+        {
+            var nearestHunter = GetNearestHunter();
+            return nearestHunter == null ?
+                null : new Danger(nearestHunter, DistanceTo(nearestHunter) < SafeDistance);
+        }
+
         private AFish GetNearestHunter()
         {
-            var fish = Aquarium
+            return Aquarium
                 .GetFishes()
                 .Where(x => x is IHunter)
-                .FirstOrDefault(x => ((IHunter) x).Victim == this);
-            return fish;
+                .FirstOrDefault(x => ((IHunter)x).Victim == this);
         }
 
         private bool IsLocationInCorner()
@@ -71,7 +80,10 @@ namespace AquariumLibrary.Fishes
             var p2 = new VectorF(Location, new PointF(Aquarium.Size.Width, 0));
             var p3 = new VectorF(Location, new PointF(0, Aquarium.Size.Height));
             var p4 = new VectorF(Location, new PointF(Aquarium.Size.Width, Aquarium.Size.Height));
-            return p1.GetLength() < 30 || p2.GetLength() < 30 || p3.GetLength() < 30 || p4.GetLength() < 30;
+            return p1.GetLength() < CornerRadius
+                || p2.GetLength() < CornerRadius
+                || p3.GetLength() < CornerRadius
+                || p4.GetLength() < CornerRadius;
         }
 
         public override void OnCollision(AFish anotherObject)

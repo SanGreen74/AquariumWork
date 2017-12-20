@@ -5,88 +5,73 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AquariumLibrary.AbstractClasses;
+using NUnit.Framework.Api;
 
 namespace AquariumLibrary.BaseClasses
 {
     public class Flock
     {
-        public int Count => _childrens.Count + 1;
-        public int ID { get; }
-        public static int MaxFlockLength { get; } = 5;
-
-        private readonly HashSet<Children> _childrens;
-        private static Dictionary<int, PointF> CountToOffsets => new Dictionary<int, PointF>
-        {
-            [1] = new PointF(15, 15),
-            [2] = new PointF(15, -15),
-            [3] = new PointF(-15, 15),
-            [4] = new PointF(-15, -15),
-        };
+        private readonly HashSet<Unit> _units = new HashSet<Unit>();
 
         public AFish Leader { get; private set; }
-
-        public Flock(AFish leader)
-        {
-            Leader = leader;
-            _childrens = new HashSet<Children>();
-        }
-
-        public void SetNewLeader(AFish newLeader)
-        {
-            Leader = newLeader;
-        }
-
-        public PointF GetChildrenPosition(AFish fish)
-        {
-            var offs = _childrens.FirstOrDefault(x => x.Fish == fish);
-            var point = new PointF(Leader.Location.X + offs.OffsetX, Leader.Location.Y + offs.OffsetY);
-            return point;
-        }
-
-        public void AddNewFish(AFish fish)
+        public int Count => _units.Count;
+        public void Add(AFish fish)
         {
             if (Leader == null)
                 Leader = fish;
-            else
-                _childrens.Add(new Children(fish, CountToOffsets[Count]));
+            fish.OnDie += Remove;
+            _units.Add(GetUnitWithOffsets(fish));
         }
 
-        public void RemoveFish(AFish fish)
+        public void Remove(AFish fish)
         {
-            if (fish == Leader)
+            var unit = _units.FirstOrDefault(x => x.Fish == fish);
+            if (unit == null)
+                throw new ArgumentNullException(nameof(unit));
+            _units.Remove(unit);
+            unit.Fish.OnDie -= Remove;
+            if (Count == 0)
             {
-                RemoveLeader();
+                Destroy();
                 return;
             }
-            _childrens.RemoveWhere(children => children.Fish == fish);
+            if (fish == Leader)
+                Redisign();
         }
 
-        private void RemoveLeader()
+        private void Redisign()
         {
-            Leader = null;
-            if (Count == 0) return;
-            var children = _childrens.FirstOrDefault();
-            _childrens.Remove(children);
-            if (children != null) Leader = children.Fish;
+            var unit = _units.FirstOrDefault();
+            unit.OffsetX = 0;
+            unit.OffsetY = 0;
+            Leader = unit.Fish;
+            throw new NotImplementedException();
         }
 
-        public class Children
+        private Unit GetUnitWithOffsets(AFish fish)
         {
-            public float OffsetX;
-            public float OffsetY;
-            public AFish Fish;
-
-            public Children(AFish fish, PointF offsetPoint)
-            {
-                Fish = fish;
-                OffsetX = offsetPoint.X;
-                OffsetY = offsetPoint.Y;
-            }
+            // TODO Calculating coordinates
+            throw new NotImplementedException();
         }
-
-        public override int GetHashCode()
+        public delegate void FlockDestroy(Flock flock);
+        public event FlockDestroy OnDestroy;
+        private void Destroy()
         {
-            return ID.GetHashCode();
+            OnDestroy?.Invoke(this);
+        }
+    }
+
+    internal class Unit
+    {
+        public AFish Fish;
+        public float OffsetX;
+        public float OffsetY;
+
+        public Unit(AFish fish, float offsetX, float offsetY)
+        {
+            Fish = fish;
+            OffsetX = offsetX;
+            OffsetY = offsetY;
         }
     }
 }

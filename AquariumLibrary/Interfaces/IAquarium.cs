@@ -51,12 +51,5 @@ namespace AquariumLibrary.Interfaces
         /// </summary>
         /// <param name="gameObject"></param>
         void RemoveObject(AGameObject gameObject);
-
-        /// <summary>
-        /// Распределяет рыбу fish в стаю, возвращает стаю, в которую была распределена рыба.
-        /// </summary>
-        /// <param name="fish">Рыба</param>
-        /// <returns></returns>
-        Flock DistributeToFlock(AFish fish);
     }
 }

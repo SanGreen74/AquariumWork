@@ -11,13 +11,12 @@ namespace AquariumLibrary.BaseClasses
     public class Aquarium : IAquarium
     {
         private readonly HashSet<AGameObject> _gameObjects;
-        private Dictionary<FishType, HashSet<Flock>> _fishTypeToFlocks;
-
+        private HashSet<Flock> _flocks;
         public Aquarium(Size size)
         {
             Size = size;
             _gameObjects = new HashSet<AGameObject>();
-            _fishTypeToFlocks = new Dictionary<FishType, HashSet<Flock>>();
+            _flocks = new HashSet<Flock>();
         }
 
         public Size Size { get; }
@@ -37,6 +36,8 @@ namespace AquariumLibrary.BaseClasses
             if (!IsCorrectLocation(newGameObject.Location))
                 throw new ArgumentException();
             _gameObjects.Add(newGameObject);
+            if (!(newGameObject is AFish fish)) return;
+            fish.OnDie += RemoveObject;
         }
 
         public void RemoveObject(AGameObject gameObject)
@@ -44,35 +45,11 @@ namespace AquariumLibrary.BaseClasses
             if (_gameObjects.Contains(gameObject))
                 _gameObjects.Remove(gameObject);
         }
-
-        public Flock DistributeToFlock(AFish fish)
-        {
-            return _fishTypeToFlocks.ContainsKey(fish.FishType) ? 
-                DistributeToExistingFlock(fish) : CreateNewFlock(fish);
-        }
-
-        private Flock CreateNewFlock(AFish fish)
-        {
-            var flock = new Flock(fish);
-            if (!_fishTypeToFlocks.ContainsKey(fish.FishType))
-            _fishTypeToFlocks[fish.FishType] = new HashSet<Flock>();
-            _fishTypeToFlocks[fish.FishType].Add(flock);
-            return flock;
-        }
-
-        private Flock DistributeToExistingFlock(AFish fish)
-        {
-            var flock = _fishTypeToFlocks[fish.FishType].Last();
-            if (flock.Count >= Flock.MaxFlockLength)
-                return CreateNewFlock(fish);
-            flock.AddNewFish(fish);
-            return flock;
-        }
-
         public bool IsCorrectLocation(PointF position)
         {
             return 0 <= position.X && position.X <= Size.Width && 0 <= position.Y && position.Y <= Size.Height;
         }
+
         public bool IsPointBelong(PointF point)
         {
             return 0 < point.X && point.X < this.Size.Width &&
