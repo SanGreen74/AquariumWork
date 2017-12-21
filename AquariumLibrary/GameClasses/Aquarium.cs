@@ -25,6 +25,12 @@ namespace AquariumLibrary.GameClasses
             return _gameObjects;
         }
 
+        public bool Clear()
+        {
+            _gameObjects.Clear();
+            return _gameObjects.Count == 0;
+        }
+
         public IEnumerable<AFish> GetFishes()
         {
             return _gameObjects.OfType<AFish>();

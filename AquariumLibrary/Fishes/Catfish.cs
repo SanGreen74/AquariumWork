@@ -35,7 +35,7 @@ namespace AquariumLibrary.Fishes
 
         public override void OnCollision(AGameObject anotherObject)
         {
-            //todo collect
+            // Не успели
         }
 
         private void Walking()

@@ -18,13 +18,10 @@ namespace AquariumLibrary.Fishes
 
         public AFish Victim { get; private set; }
 
-        public AFish Enemy { get; private set; }
-
         public void Walking()
         {
             Victim = FindNextVictim();
-
-            if (Victim != null && Randomizer.Success(2))
+            if (Victim != null && Randomizer.Success(0.4))
             {
                 Victim.OnDie += ResetVictim;
                 Speed = Settings.SwordsMan.MaxSpeed;
@@ -50,20 +47,9 @@ namespace AquariumLibrary.Fishes
             MoveTo(GetVictimNextPoint());
         }
 
-        public void RunAway()
-        {
-            if (DistanceTo(Enemy) > Size.Width * 1.5)
-            {
-                PopState();
-                Speed = Settings.SwordsMan.OfficialSpeed;
-                return;
-            }
-            MoveTo(GetNextPoint());
-        }
-
         public override void OnCollision(AGameObject anotherObject)
         {
-            if (anotherObject != Victim) return;
+            if (anotherObject != Victim || State != FishState.Attack) return;
             Victim.Die();
             Victim = null;
         }

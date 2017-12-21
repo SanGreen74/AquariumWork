@@ -136,7 +136,7 @@ namespace AquariumLibrary.Fishes
 
         public override void OnCollision(AGameObject anotherObject)
         {
-            // todo collect cash
+            // Не успели сделать сбор денег
         }
 
         private float _speedCoefficient => State == FishState.RunAway ? 2f : 1;

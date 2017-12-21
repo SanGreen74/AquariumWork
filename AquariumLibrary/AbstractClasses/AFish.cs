@@ -44,6 +44,11 @@ namespace AquariumLibrary.AbstractClasses
             });
         }
 
+        public override void Update()
+        {
+            _brain.Update();
+        }
+
         protected void PushState(Action action, FishState state)
         {
             if (action != null)
@@ -58,11 +63,6 @@ namespace AquariumLibrary.AbstractClasses
         public void Die()
         {
             OnDie?.Invoke(this);
-        }
-
-        public void Update()
-        {
-            _brain.Update();
         }
 
         public delegate void FishHandler(AFish fish);

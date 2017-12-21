@@ -33,28 +33,9 @@ namespace AquariumWF
 
         private void Init()
         {
-            Draw();
-            var render = new Timer { Interval = 1 };
-            render.Tick += (sender, args) => { Invalidate(); };
-            render.Start();
-            var frames = new Timer { Interval = 15 };
-            frames.Tick += (sender, args) =>
-            {
-                _aquarium.GetFishes().ToList().ForEach(x =>
-                {
-                    x.Update();
-                    x.HandleCollisions();
-                });
-            };
-            frames.Start();
-            RegisterButton("Neon", ButtonPoint(1), _buttonDefaultSize,
-                (s, e) => _aquarium.AddObject(_fishFactory.GetBlueNeon()));
-            RegisterButton("Piranha", ButtonPoint(2), _buttonDefaultSize,
-                (s, e) => _aquarium.AddObject(_fishFactory.GetPiranha()));
-            RegisterButton("Swordsman", ButtonPoint(3), _buttonDefaultSize,
-                (s, e) => _aquarium.AddObject(_fishFactory.GetSwordsMan()));
-            RegisterButton("Catfish", ButtonPoint(4), _buttonDefaultSize,
-                (s, e) => _aquarium.AddObject(_fishFactory.GetCatfish()));
+            SetDrawingSettings();
+            SetImagesSettings();
+            RegisterButtons();
         }
 
         private void SetImagesSettings()
@@ -69,6 +50,37 @@ namespace AquariumWF
 
             _drawer.SetSettings(typeof(SwordsMan), FishState.None, Properties.Resources.PutinWalking, true);
             _drawer.SetSettings(typeof(SwordsMan), FishState.Attack, Properties.Resources.PutinAttack, false);
+        }
+
+        private void SetDrawingSettings()
+        {
+            Draw();
+            var render = new Timer { Interval = 1 };
+            render.Tick += (sender, args) => { Invalidate(); };
+            render.Start();
+            var frames = new Timer { Interval = 15 };
+            frames.Tick += (sender, args) =>
+            {
+                _aquarium.GetFishes().ToList().ForEach(x =>
+                {
+                    x.Update();
+                    x.HandleCollisions();
+                });
+            };
+            frames.Start();
+        }
+
+        private void RegisterButtons()
+        {
+            RegisterButton("Neon", ButtonPoint(1), _buttonDefaultSize,
+                (s, e) => _aquarium.AddObject(_fishFactory.GetBlueNeon()));
+            RegisterButton("Piranha", ButtonPoint(2), _buttonDefaultSize,
+                (s, e) => _aquarium.AddObject(_fishFactory.GetPiranha()));
+            RegisterButton("Swordsman", ButtonPoint(3), _buttonDefaultSize,
+                (s, e) => _aquarium.AddObject(_fishFactory.GetSwordsMan()));
+            RegisterButton("Catfish", ButtonPoint(4), _buttonDefaultSize,
+                (s, e) => _aquarium.AddObject(_fishFactory.GetCatfish()));
+            RegisterButton("Clear", ButtonPoint(5), _buttonDefaultSize, (s,e)=> _aquarium.Clear());
         }
 
         private void Draw()

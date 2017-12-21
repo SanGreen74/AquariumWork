@@ -56,6 +56,7 @@ namespace AquariumLibrary.AbstractClasses
         /// <summary>
         /// Метод, обрабатывающий состояние объекта на каждой итерации
         /// </summary>
+        public abstract void Update();
 
         private VectorF _direction;
 

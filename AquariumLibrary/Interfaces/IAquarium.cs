@@ -52,5 +52,11 @@ namespace AquariumLibrary.Interfaces
         /// </summary>
         /// <param name="gameObject"></param>
         void RemoveObject(AGameObject gameObject);
+
+        /// <summary>
+        /// Очищает аквариум от всех объектов
+        /// </summary>
+        /// <returns></returns>
+        bool Clear();
     }
 }
