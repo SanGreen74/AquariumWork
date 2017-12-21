@@ -5,7 +5,7 @@ using AquariumLibrary.Interfaces;
 
 namespace AquariumLibrary.AbstractClasses
 {
-    public abstract class AGameObject
+    public abstract class AGameObject : ICollision<AGameObject>
     {
         /// <summary>
         /// Создает новый экземпляр объекта
@@ -56,7 +56,6 @@ namespace AquariumLibrary.AbstractClasses
         /// <summary>
         /// Метод, обрабатывающий состояние объекта на каждой итерации
         /// </summary>
-        public abstract void Update();
 
         private VectorF _direction;
 
@@ -73,6 +72,20 @@ namespace AquariumLibrary.AbstractClasses
                     value.Normalized : value;
             }
         }
+
+        public bool IsPointInside(PointF point)
+        {
+            var rectangle = Rectangle;
+            return rectangle.Left < point.X && point.X < rectangle.Right &&
+                   rectangle.Top < point.Y && point.Y < rectangle.Bottom;
+        }
+
+        public bool IsCollision(AGameObject anotherObject)
+        {
+            return Rectangle.IntersectsWith(anotherObject.Rectangle);
+        }
+
+        public abstract void OnCollision(AGameObject anotherObject);
     }
 
 }

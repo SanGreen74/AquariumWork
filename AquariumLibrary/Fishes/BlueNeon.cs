@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using AquariumLibrary.AbstractClasses;
 using AquariumLibrary.BaseClasses;
+using AquariumLibrary.GameClasses;
 using AquariumLibrary.Interfaces;
 using MoreLinq;
 
@@ -13,21 +14,14 @@ namespace AquariumLibrary.Fishes
         public BlueNeon(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 6;
-            PushState(Walking, FishState);
-        }
-        
-        private const int SafeDistance = 150;
-        private const int CornerRadius = 30;
-
-        public override void OnCollision(AFish anotherObject)
-        {
-
+            Type = FishType.BlueNeon;
+            Speed = Settings.BlueNeon.Speed;
+            PushState(Walking, FishState.Walking);
         }
 
         private void Walking()
         {
-            var danger = IsDangerous();
+            var danger = GetDangerous();
             if (danger != null && danger.IsDanger)
             {
                 PushState(RunAway, FishState.RunAway);
@@ -38,22 +32,19 @@ namespace AquariumLibrary.Fishes
 
         private void RunAway()
         {
-            var danger = IsDangerous();
+            var danger = GetDangerous();
             if (danger == null || !danger.IsDanger)
-            {
                 PopState();
-                return;
-            }
-            RunAwayFrom(danger.Hunter);
+            else
+                RunAwayFrom(danger.Hunter);
         }
 
         private void RunAwayFrom(AFish hunter)
         {
             if (IsLocationInCorner())
                 return;
-            var coordX = Location.X - hunter.Location.X;
-            var coordY = Location.Y - hunter.Location.Y;
-            Direction = new VectorF(coordX, coordY);
+            Direction = new VectorF(Location.X - hunter.Location.X, 
+                                    Location.Y - hunter.Location.Y);
             MoveTo(GetNextPoint());
         }
 
@@ -61,30 +52,63 @@ namespace AquariumLibrary.Fishes
         {
             while (true)
             {
-                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X*1.2f,
-                    Location.Y + (float)Speed * Direction.Y* 1.2f);
-                if (Aquarium.IsPointBelong(nextPoint)) return nextPoint;
-                Direction = Direction.Rotate(Randomizer.rnd.Next(0, 180));
+                var nextPoint = new PointF(Location.X + _speedCoefficient*Speed * Direction.X,
+                    Location.Y + _speedCoefficient * Speed * Direction.Y);
+                if (Aquarium.IsPointBelong(nextPoint))
+                    return nextPoint;
+                if (State == FishState.RunAway && !IsLocationInCorner())
+                    MoveAroundWalls();
+                else
+                    Direction = Direction.Rotate(Randomizer.Next(-90, 90) * Math.PI / 180);
             }
         }
 
-        private Danger IsDangerous()
+        private Danger GetDangerous()
         {
             var nearestHunter = GetNearestHunter();
             return nearestHunter == null ?
-                null : new Danger(nearestHunter, DistanceTo(nearestHunter) < SafeDistance);
+                null : new Danger(nearestHunter, DistanceTo(nearestHunter) < Settings.BlueNeon.SafeDistance);
         }
 
         private AFish GetNearestHunter()
         {
             var hunters = Aquarium.GetFishes().Where(x => x is IHunter);
-
             return !hunters.Any() ? null : hunters.MinBy(DistanceTo);
+        }
 
-            return Aquarium
-                .GetFishes()
-                .Where(x => x is IHunter)
-                .FirstOrDefault(/*x => ((IHunter)x).Victim == this*/);
+        // bad code
+        private void MoveAroundWalls()
+        {
+            if (Direction.Angle > 0 && Direction.Angle < 90)
+            {
+                if (Aquarium.Size.Height - Location.Y < Size.Height)
+                    Direction = VectorF.Rigth;
+                if (Aquarium.Size.Width - Location.X < Size.Width)
+                    Direction = VectorF.Down;
+            }
+            else if (Direction.Angle > 90 && Direction.Angle < 180)
+            {
+                if (Location.X < Size.Width)
+                    Direction = VectorF.Down;
+                if (Aquarium.Size.Height - Location.Y < Size.Height)
+                    Direction = VectorF.Left;
+            }
+            else if (Direction.Angle > 180 && Direction.Angle < 270)
+            {
+                if (Location.X < Size.Width)
+                    Direction = VectorF.Up;
+                if (Location.Y < Size.Height)
+                    Direction = VectorF.Left;
+            }
+            else if (Direction.Angle > 270 && Direction.Angle < 360)
+            {
+                if (Location.Y < Size.Height)
+                    Direction = VectorF.Rigth;
+                if (Aquarium.Size.Width - Location.X < Size.Width)
+                    Direction = VectorF.Up;
+            }
+            else
+                Direction = Direction.Rotate(Randomizer.Next(-90, 90) * Math.PI / 180);
         }
 
         private bool IsLocationInCorner()
@@ -93,13 +117,11 @@ namespace AquariumLibrary.Fishes
             var p2 = new VectorF(Location, new PointF(Aquarium.Size.Width, 0));
             var p3 = new VectorF(Location, new PointF(0, Aquarium.Size.Height));
             var p4 = new VectorF(Location, new PointF(Aquarium.Size.Width, Aquarium.Size.Height));
-            return p1.GetLength() < CornerRadius
-                || p2.GetLength() < CornerRadius
-                || p3.GetLength() < CornerRadius
-                || p4.GetLength() < CornerRadius;
+            return p1.GetLength() < Settings.BlueNeon.CornerRadius
+                || p2.GetLength() < Settings.BlueNeon.CornerRadius
+                || p3.GetLength() < Settings.BlueNeon.CornerRadius
+                || p4.GetLength() < Settings.BlueNeon.CornerRadius;
         }
-
-
 
         private class Danger
         {
@@ -111,5 +133,12 @@ namespace AquariumLibrary.Fishes
                 Hunter = hunter;
             }
         }
+
+        public override void OnCollision(AGameObject anotherObject)
+        {
+            // todo collect cash
+        }
+
+        private float _speedCoefficient => State == FishState.RunAway ? 2f : 1;
     }
 }

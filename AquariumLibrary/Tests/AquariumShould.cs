@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using AquariumLibrary.BaseClasses;
 using AquariumLibrary.Fishes;
 using AquariumLibrary.GameClasses;
 using AquariumLibrary.Interfaces;
@@ -25,17 +24,16 @@ namespace AquariumLibrary.Tests
         public void CorrectAddNewObject()
         {
             var randomCount = new Random().Next(50);
-            BlueNeon neon;
             for (var i = 0; i < randomCount; i++)
-                neon = new BlueNeon(new PointF(10, 10), new SizeF(10, 10), _aquarium);
+                _aquarium.AddObject(new BlueNeon(new PointF(10, 10), new SizeF(10, 10), _aquarium));
             _aquarium.GetGameObjects().Count().Should().Be(randomCount);
         }
 
         [Test]
         public void AddObjectWithIncorrectLocation()
         {
-            //void createNewFish() => new BlueNeon(new PointF(_aquarium.Size.Width + 1, 10), _aquarium.Size, _aquarium);
-            //Assert.Throws<ArgumentException>(createNewFish);
+            void createNewFish() => new BlueNeon(new PointF(_aquarium.Size.Width + 1, 10), _aquarium.Size, _aquarium);
+            Assert.Throws<ArgumentException>(createNewFish);
         }
 
         [Test]

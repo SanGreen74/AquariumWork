@@ -3,80 +3,91 @@ using System;
 using AquariumLibrary.Interfaces;
 using System.Drawing;
 using AquariumLibrary.BaseClasses;
+using AquariumLibrary.GameClasses;
 
 namespace AquariumLibrary.Fishes
 {
     public class Catfish : AFish
     {
-        
-        protected override PointF GetNextPoint()
-        {
-            
-            var random = new Random();
-            while(true)
-            {
-                var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
-                if (Aquarium.IsPointBelong(nextPoint) && nextPoint.Y > CatfishBroad) return nextPoint;
-                Direction = Direction.Rotate(random.Next(0, 180));
-            }
-        }
-
-        public override void OnCollision(AFish anotherObject)
-        {
-            //TODO
-        }
-
         public Catfish(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            CatfishBroad = Aquarium.Size.Height / 2.0;
+            _catfishBroad = Aquarium.Size.Height / 2.0;
 
             if (CheckCorrectLocation(location) == false)
                 throw new ArgumentException("Точка не принадлежит области обитания");
-            Speed = 2;
+
+            Speed = Settings.Catfish.Speed;
             PushState(Walking, FishState.Walking);
+            Type = FishType.Catfish;
         }
-            private int counter = 268;
+
+        protected override PointF GetNextPoint()
+        {
+            while (true)
+            {
+                var nextPoint = new PointF(Location.X + Speed * Direction.X, Location.Y + Speed * Direction.Y);
+                if (Aquarium.IsPointBelong(nextPoint) && nextPoint.Y > _catfishBroad)
+                    return nextPoint;
+                Direction = Direction.Rotate(Randomizer.Next(-90, 90) * Math.PI / 180);
+            }
+        }
+
+        public override void OnCollision(AGameObject anotherObject)
+        {
+            //todo collect
+        }
+
         private void Walking()
         {
-            if (nextPointSleep == null)
-                nextPointSleep = RandomPoint();
-            var vector = new VectorF(Location, (PointF)nextPointSleep);
-            if(vector.GetLength() < GetStepLength())
+            if (_nextPointSleep == null)
             {
-                nextPointSleep = null;
-                counter = 180;
-                PushState(Sleep, FishState.Sleep);
-                return;
+                _nextPointSleep = GetRandomPoint();
+                Direction = new VectorF(((PointF)_nextPointSleep).X - Location.X, ((PointF)_nextPointSleep).Y - Location.Y);
             }
-            var point = GetNextPoint();
-            MoveTo(point);
+
+            var vectorToNextPoint = new VectorF(Location, (PointF)_nextPointSleep);
+            if (vectorToNextPoint.GetLength() < GetStepLength())
+            {
+                _nextPointSleep = null;
+                _counter = 60*3;
+                PushState(Sleep, FishState.Sleep);
+            }
+            else
+                MoveTo(GetNextPoint());
         }
+
         private void Sleep()
         {
-            counter--;
-            if (counter < 0)
+            _counter--;
+            if (_counter < 0)
                 PopState();
         }
-        private double CatfishBroad;
+
         private bool CheckCorrectLocation(PointF location)
         {
-            return location.Y >= CatfishBroad;
+            return location.Y >= _catfishBroad;
         }
-        private PointF RandomPoint()
+
+        private PointF GetRandomPoint()
         {
-            var rndX = Randomizer.rnd.Next(0, Aquarium.Size.Width);
-            var rndY = Randomizer.rnd.Next((int)CatfishBroad, Aquarium.Size.Height);
-            var point1 = new PointF(rndX, rndY);
-            Direction = new VectorF(point1.X - Location.X, point1.Y - Location.Y);
-            return point1;
+            var x = Randomizer.Next(0, Aquarium.Size.Width);
+            var y = Randomizer.Next((int)_catfishBroad, Aquarium.Size.Height);
+            var randomPoint = new PointF(x, y);
+            return randomPoint;
         }
-        private PointF? nextPointSleep;   
-       public double GetStepLength()
+
+        public double GetStepLength()
         {
-            var dx = (float)Speed * Direction.X;
-            var dy = (float)Speed * Direction.Y;
-            return Math.Sqrt(dx*dx + dy*dy);
-        }   
+            var dx = Speed * Direction.X;
+            var dy = Speed * Direction.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        private readonly double _catfishBroad;
+
+        private PointF? _nextPointSleep;
+
+        private int _counter = 268;
     }
 }

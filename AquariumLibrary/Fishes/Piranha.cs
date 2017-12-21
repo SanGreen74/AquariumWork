@@ -1,9 +1,9 @@
 ﻿using AquariumLibrary.AbstractClasses;
 using AquariumLibrary.Interfaces;
-using System;
 using System.Linq;
 using System.Drawing;
 using AquariumLibrary.BaseClasses;
+using AquariumLibrary.GameClasses;
 
 namespace AquariumLibrary.Fishes
 {
@@ -12,64 +12,60 @@ namespace AquariumLibrary.Fishes
         public Piranha(PointF location, SizeF size, IAquarium aquarium)
             : base(location, size, aquarium)
         {
-            Speed = 4;
+            Speed = Settings.Piranha.Speed;
             PushState(Walking, FishState.Walking);
-        }
-
-        private AFish _victim;
-
-        public AFish Victim
-        {
-            get
-            {
-                return _victim;
-            }
-            private set
-            {
-                _victim = value;
-            }
-        }
-
-        public AFish FindNextVictim()
-        {
-            return Aquarium.GetFishes().FirstOrDefault(fish => Randomizer.LowChanceOfAttac() && fish.FishType != FishType.Piranha);
+            Type = FishType.Piranha;
         }
 
         public void Walking()
         {
-            MoveTo(GetNextPoint());
             Victim = FindNextVictim();
             if (Victim != null)
             {
                 PushState(Attack, FishState.Attack);
+                Victim.OnDie += ResetVictim;
             }
-
+            else
+                MoveTo(GetNextPoint());
         }
 
         public void Attack()
         {
-            if(Victim == null)
-            {
+            if (Victim == null)
                 PopState();
-                return;
-            }
-            MoveTo(GetVictimNextPoint());
+            else
+                MoveTo(GetVictimNextPoint());
         }
 
-        public override void OnCollision(AFish anotherObject)
+        public override void OnCollision(AGameObject anotherObject)
         {
-            if(anotherObject == Victim)
-            {
-                Victim.Die();
-                Victim = null;
-            }
+            if (anotherObject != Victim) return;
+            Victim.Die();
+            Victim = null;
         }
 
         public PointF GetVictimNextPoint()
         {
             Direction = new VectorF(Victim.Location.X - Location.X, Victim.Location.Y - Location.Y);
-            var nextPoint = new PointF(Location.X + (float)Speed * Direction.X, Location.Y + (float)Speed * Direction.Y);
+            var nextPoint = new PointF(Location.X + Speed * Direction.X, Location.Y + Speed * Direction.Y);
             return nextPoint;
         }
+
+        public AFish FindNextVictim()
+        {
+            return Aquarium.GetFishes()
+                .FirstOrDefault(fish => Randomizer.Success(0.4)
+                                        && Settings.Piranha.Food.Contains(fish.Type));
+        }
+
+        private void ResetVictim(AFish fish)
+        {
+            if (Victim == fish)
+            {
+                Victim.OnDie -= ResetVictim;
+                Victim = null;
+            }
+        }
+        public AFish Victim { get; private set; }
     }
 }

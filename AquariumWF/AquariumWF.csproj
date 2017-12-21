@@ -86,16 +86,21 @@
       <Name>AquariumLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\Background\kreml.jpg" />
-    <Content Include="Resources\Fishes\mentos.png" />
-    <Content Include="Resources\Fishes\navalny.png" />
-    <Content Include="Resources\Fishes\navaыыlny.png" />
+    <None Include="Resources\DimonSleep.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\kreml.jpg" />
     <None Include="Resources\navalny.png" />
-    <None Include="Resources\mentos.png" />
-    <None Include="Resources\NavalnyAllStates.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DimonNotSleep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PutinWalking.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PutinAttack.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

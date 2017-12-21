@@ -1,18 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AquariumLibrary.BaseClasses
 {
     public static class Randomizer
     {
-        public static Random rnd = new Random();
+        private static readonly Random _random = new Random();
 
-        public static bool LowChanceOfAttac()
+        /// <summary>
+        /// Возвращает true или false, результат зависит от процента удачи
+        /// </summary>
+        /// <param name="percent">Процент удачи от 0 до 100</param>
+        /// <returns></returns>
+        public static bool Success(double percent)
         {
-            return (Randomizer.rnd.Next(400) == 1);
+            if (percent < 0 || percent > 100)
+                throw new ArgumentException(nameof(percent));
+            return Next(0, 100) <= percent;
+        }
+
+        public static int Next(int min, int max)
+        {
+            var next = _random.Next(min, max);
+            return next;
         }
     }
 }

@@ -73,6 +73,26 @@ namespace AquariumWF.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DimonNotSleep {
+            get {
+                object obj = ResourceManager.GetObject("DimonNotSleep", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DimonSleep {
+            get {
+                object obj = ResourceManager.GetObject("DimonSleep", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MentosAllStates {
             get {
                 object obj = ResourceManager.GetObject("MentosAllStates", resourceCulture);
@@ -83,9 +103,29 @@ namespace AquariumWF.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap NavalnyAllStates {
+        internal static System.Drawing.Bitmap NavalnyWalking {
             get {
-                object obj = ResourceManager.GetObject("NavalnyAllStates", resourceCulture);
+                object obj = ResourceManager.GetObject("NavalnyWalking", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PutinAttack {
+            get {
+                object obj = ResourceManager.GetObject("PutinAttack", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PutinWalking {
+            get {
+                object obj = ResourceManager.GetObject("PutinWalking", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

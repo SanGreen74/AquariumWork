@@ -57,31 +57,32 @@
   <ItemGroup>
     <Compile Include="AbstractClasses\AFish.cs" />
     <Compile Include="AbstractClasses\AGameObject.cs" />
+    <Compile Include="Factories\AFactory.cs" />
+    <Compile Include="Factories\FishFactory.cs" />
     <Compile Include="GameClasses\Aquarium.cs" />
     <Compile Include="BaseClasses\Brain.cs" />
-    <Compile Include="GameClasses\Flock.cs" />
     <Compile Include="BaseClasses\Randomizer.cs" />
     <Compile Include="BaseClasses\VectorF.cs" />
-    <Compile Include="Drawing\Drawer.cs" />
+    <Compile Include="Drawing\GameObjectDrawer.cs" />
     <Compile Include="Drawing\Interfaces\IDrawer.cs" />
     <Compile Include="Fishes\BlueNeon.cs" />
     <Compile Include="Fishes\Piranha.cs" />
     <Compile Include="Fishes\SwordsMan.cs" />
     <Compile Include="Fishes\Catfish.cs" />
+    <Compile Include="GameClasses\Settings.cs" />
     <Compile Include="Interfaces\IAquarium.cs" />
     <Compile Include="Interfaces\ICollision.cs" />
     <Compile Include="Interfaces\IHunter.cs" />
     <Compile Include="Interfaces\IMovable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\AquariumShould.cs" />
+    <Compile Include="Tests\FakePresidentShould.cs" />
     <Compile Include="Tests\GameObjectShould.cs" />
     <Compile Include="Tests\VectorFShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Drawing\Classes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

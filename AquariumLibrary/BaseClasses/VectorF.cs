@@ -10,11 +10,6 @@ namespace AquariumLibrary.BaseClasses
 {
     public class VectorF
     {
-        public PointF Start { get; }
-        public PointF End { get; }
-        public float X { get; }
-        public float Y { get; }
-        public double Angle => Math.Atan2(X, Y);
         public VectorF(PointF start, PointF end)
         {
             Start = start;
@@ -102,7 +97,7 @@ namespace AquariumLibrary.BaseClasses
         public VectorF Normalize()
         {
             var length = (float)GetLength();
-            return new VectorF(X /length, Y /length);
+            return new VectorF(X / length, Y / length);
         }
 
         /// <summary>
@@ -114,17 +109,17 @@ namespace AquariumLibrary.BaseClasses
         /// <summary>
         /// Возвращает еденичный вектор с координатами (-1,0)
         /// </summary>
-        public static VectorF Left => new VectorF(-1,-0);
+        public static VectorF Left => new VectorF(-1, -0);
 
         /// <summary>
         /// Возвращает еденичный вектор с координатами (1,0)
         /// </summary>
-        public static VectorF Rigth => new VectorF(1f,0f);
+        public static VectorF Rigth => new VectorF(1f, 0f);
 
         /// <summary>
         /// Возвращает еденичный вектор с координатами (0,-1)
         /// </summary>
-        public static VectorF Up => new VectorF(0,-1);
+        public static VectorF Up => new VectorF(0, -1);
 
         /// <summary>
         /// Возвращает еденичный вектор с координатами (0,1)
@@ -136,13 +131,20 @@ namespace AquariumLibrary.BaseClasses
         /// </summary>
         /// <param name="angle">Угол в радианах</param>
         /// <returns></returns>
-        public VectorF Rotate(int angle)
+        public VectorF Rotate(double angle)
         {
-            var newX = X * Math.Cos(angle) - Y * Math.Sin(angle);
-            var newY = X * Math.Sin(angle) + Y * Math.Cos(angle);
-            return new VectorF((float)newX, (float)newY);
+            var newX = X * (float)Math.Cos(angle) - Y * (float)Math.Sin(angle);
+            var newY = X* (float)Math.Sin(angle) + Y * (float)Math.Cos(angle);
+            return new VectorF(newX, newY);
         }
 
-        public static VectorF RandomVectorF => new VectorF(Randomizer.rnd.Next(1,180), Randomizer.rnd.Next(1,180));
+        public PointF Start { get; }
+        public PointF End { get; }
+        public float X { get; private set; }
+        public float Y { get; private set; }
+        public double Angle => _angle < 0 ? _angle + 360 : _angle;
+
+        private double _angle => (Math.Atan2(Y, X) * 180 / Math.PI) % 360;
+        public static VectorF RandomVectorF => new VectorF(Randomizer.Next(1, 180), Randomizer.Next(1, 180));
     }
 }

@@ -12,12 +12,10 @@ namespace AquariumLibrary.GameClasses
     public class Aquarium : IAquarium
     {
         private readonly HashSet<AGameObject> _gameObjects;
-        private HashSet<Flock> _flocks;
         public Aquarium(Size size)
         {
             Size = size;
             _gameObjects = new HashSet<AGameObject>();
-            _flocks = new HashSet<Flock>();
         }
 
         public Size Size { get; }
@@ -48,7 +46,8 @@ namespace AquariumLibrary.GameClasses
         }
         public bool IsCorrectLocation(PointF position)
         {
-            return 0 <= position.X && position.X <= Size.Width && 0 <= position.Y && position.Y <= Size.Height;
+            return 0 <= position.X && position.X <= Size.Width && 
+                   0 <= position.Y && position.Y <= Size.Height;
         }
 
         public bool IsPointBelong(PointF point)
